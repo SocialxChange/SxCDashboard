@@ -56,6 +56,7 @@ dashboardPage(
          ),
 # Tabla con proyectos
       box(title = "Proyectos",
+          width = 8,
           status = "info",
           solidHeader = TRUE,
 # Imprimimos tabla preparada en server.R con comando renderDataTable          

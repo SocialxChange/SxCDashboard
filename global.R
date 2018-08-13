@@ -1,3 +1,4 @@
+Sys.setlocale("LC_ALL", 'UTF-8')
 library(shiny)
 library(dplyr)
 library(shinydashboard)
