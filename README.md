@@ -1,12 +1,12 @@
-# SxCShinyApp
+# SxCReportDemo
 
 Este repositorio tiene los scripts de la primera version del dashboard de SocialxChange
 
 La aplicación muestra datos de la base Prototipo.RData que fue generada con Prototipo.R (ver carpeta datos)
 
-La aplicación se puede ver en [sebacea.shinyapps.io/SocialXChangeAppBeta/](https://sebacea.shinyapps.io/SocialXChangeAppBeta/)
+La aplicación se puede ver en [sebacea.shinyapps.io/SxCReportDemo/](https://sebacea.shinyapps.io/SxCReportDemo/)
 
-## Estructura de la Shiny App
+## Estructura de la App
 
 *   global.R carga las librerías necesarias y la base de datos
 *   ui.R define la estructura de la página web y los inputs con los que se calculan las tablas y gráficos en server.R
