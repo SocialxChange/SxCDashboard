@@ -25,5 +25,7 @@ function(input, output) {
   output$tabla <- renderDataTable(filter(Proyectos2016[,c(1,4,7:10)], Proyectos2016$Comuna %in% input$comunas & Proyectos2016$categoria %in% input$categorias))
 # Definimos la tabla del comparador que es llamada igual que el tab donde está
   output$comparador<-renderDataTable(Proyectos2016)
-                                     
+# Tabla 1 Reporte
+  output$tbl = renderDT(
+    RankingMallPlaza, options = list(lengthChange = FALSE), rownames=FALSE, caption = "Tabla 1: Donaciones por Institución Beneficiaria, MM$") 
   }

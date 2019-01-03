@@ -5,6 +5,14 @@ library(shinydashboard)
 library(bubbles)        # devtools::install_github("jcheng5/bubbles")
 library(plotly)         # grafico tendencia gtrend
 
-PathDatos<-"~/SxCShinyApp/datos/"
+
+
+
+
+
+PathDatos<-"~/SocialxChange-Data/SxCShinyApp/datos/"
 load(paste(PathDatos,"Prototipo.RData",sep=""))
-     
+#Generada luego de linea 87 en Mall_Plaza.Rmd
+load(paste(PathDatos,"20180920RankingMallPlaza2009_2016.RData",sep=""))
+#Generada por  Mall_Plaza.R 
+load(paste(PathDatos,"20180920Donaciones_MallPlaza2009_2016.RData",sep=""))
