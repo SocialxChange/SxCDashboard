@@ -4,7 +4,7 @@ library(dplyr)
 library(shinydashboard)
 library(bubbles)        # devtools::install_github("jcheng5/bubbles")
 library(plotly)         # grafico tendencia gtrend
-
+library(DT) 
 
 
 
