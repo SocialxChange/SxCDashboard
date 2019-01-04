@@ -10,7 +10,7 @@ library(plotly)         # grafico tendencia gtrend
 
 
 
-PathDatos<-"~/SocialxChange-Data/SxCShinyApp/datos/"
+PathDatos<-"datos/"
 load(paste(PathDatos,"Prototipo.RData",sep=""))
 #Generada luego de linea 87 en Mall_Plaza.Rmd
 load(paste(PathDatos,"20180920RankingMallPlaza2009_2016.RData",sep=""))
