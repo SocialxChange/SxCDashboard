@@ -1,10 +1,10 @@
-# SxCReportDemo
+# SxCDashboard
 
 Este repositorio tiene los scripts de la primera version del dashboard de SocialxChange
 
 La aplicación muestra datos de la base Prototipo.RData que fue generada con Prototipo.R (ver carpeta datos)
 
-La aplicación se puede ver en [sebacea.shinyapps.io/SxCReportDemo/](https://sebacea.shinyapps.io/SxCReportDemo/)
+La aplicación se puede ver en [sebacea.shinyapps.io/SxCDashboard/](https://sebacea.shinyapps.io/SxCDashboard/)
 
 ## Estructura de la App
 
