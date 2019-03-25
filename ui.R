@@ -1,6 +1,6 @@
 dashboardPage(
 # Definimos el encabezado del sitio
-    dashboardHeader(title = "SxC Report Beta"),
+    dashboardHeader(title = "SxC Reporte"),
 # Definimos la barra de navegaci??n del lado izquierdo
   dashboardSidebar(
     sidebarMenu(
@@ -14,6 +14,9 @@ dashboardPage(
   ),
 # Definimos lo que se mostrar?? en el cuerpo central del sitio
   dashboardBody(
+    tags$head(
+      tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
+    ),
     tabItems(
       
 # First tab content: relacionado al boton de home de la barra de navegaci??n
