@@ -19,7 +19,9 @@ function(input, output) {
   output$burbujas <- renderBubbles({
     df<-filter(MetricasComuna[,c(1,3)], MetricasComuna$comuna %in% input$comunas)
     
-    bubbles(df$pobrezaMult, df$comuna, color=rainbow(nrow(df), alpha = NULL), textColor = "#FFFFFF")
+    bubbles(df$pobrezaMult, df$comuna, 
+            color=sequential_hcl(nrow(df), h = col2rgb("#efc000")), #rainbow(nrow(df), alpha = NULL)
+            textColor = "#FFFFFF")
   })
 # Definimos la tabla del home  
   output$tabla <- renderDataTable(filter(Proyectos2016[,c(1,4,7:10)], Proyectos2016$Comuna %in% input$comunas & Proyectos2016$categoria %in% input$categorias))
