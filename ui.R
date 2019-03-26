@@ -6,8 +6,8 @@ dashboardPage(
     sidebarMenu(
 # Home      
       menuItem("Home", tabName = "home", icon = icon("dashboard")),
-      menuItem("Introducción", tabName = "reporte", icon = icon("info-circle")),
-      menuItem("Estadísticas", tabName = "stats", icon = icon("percentage")),
+      menuItem("Gestión", tabName = "gestion", icon = icon("info-circle")),
+      menuItem("Proyectos", tabName = "proyectos", icon = icon("percentage")),
 # Tabla general  llamada comparador      
       menuItem("Banco Proyectos", tabName = "comparador", icon = icon("th"))
     )
@@ -20,58 +20,75 @@ dashboardPage(
     tabItems(
       
 # First tab content: relacionado al boton de home de la barra de navegaci??n
-      #source("tabs/home.R")
+      #includeScript("tabs/home.R"),
       tabItem(tabName = "home",
-                                   # Definimos la primera fila de objetos donde pondremos el grafico de burbujas,
-                                   # una mini pagina "fluidPage" que contiene los botones con total de donaciones y total de donante, y
-                                   # el grafico de tendencias de google
-                                   fluidRow(
-                                     # Primer elemento con caja conteniendo grafico de burbujas      
-                                     box(
-                                       width = 6, solidHeader = TRUE, 
-                                       title="Pobreza Multidimensional por Comuna",
-                                       # Imprimimos grafico preparado en server.R con comando renderBubbles        
-                                       bubblesOutput("burbujas", width = "100%", height = 600)
-                                     ),
-                                     # Definici??n de mini pagina       
-                                     fluidPage(
-                                       # Columna con los dos botones        
-                                       column(6,valueBoxOutput("cuantas",width=3),valueBoxOutput("cuanto",width=3)),
-                                       # Caja con grafico tendencias de Google       
-                                       box(
-                                         title = "Tendencias de Google",
-                                         status= "info", solidHeader = TRUE,
-                                         plot_ly(gtrends, x = ~fecha, y = ~educacion, name = 'Educación', type = 'scatter', mode = 'lines') %>%
-                                           add_trace(y = ~salud, name = 'Salud', mode = 'lines+markers') %>%
-                                           add_trace(y = ~infancia, name = 'Infancia', mode = 'lines+markers')%>%
-                                           add_trace(y = ~emprendimiento, name = 'Emprendimiento', mode = 'lines+markers')%>%
-                                           add_trace(y = ~urbanismo, name = 'Urbanismo', mode = 'lines+markers')
-                                       ))
-                                   ),
-                                   # Segunda fila con selector de categor??as y tabla de proyectos
-                                   fluidRow(
-                                     # Caja con selector de categorias que define variable input$categorias ocupada en server.R      
-                                     box(width = 2, status = "info", solidHeader = TRUE,
-                                         title = "Categorías",
-                                         checkboxGroupInput("categorias","" ,levels(Proyectos2016$categoria),selected=levels(Proyectos2016$categoria))
-                                     ),
-                                     # Caja con selector de comunas que define variable input$comunas ocupada en server.R      
-                                     box(width = 2, status = "info", solidHeader = TRUE,
-                                         title = "Comunas",
-                                         checkboxGroupInput("comunas","" ,levels(MetricasComuna$comuna), selected = levels(MetricasComuna$comuna))
-                                     ),
-                                     # Tabla con proyectos
-                                     box(title = "Proyectos",
-                                         width = 8,
-                                         status = "info",
-                                         solidHeader = TRUE,
-                                         # Imprimimos tabla preparada en server.R con comando renderDataTable          
-                                         dataTableOutput('tabla'))
-                                   )
+              h2("Protectora de todos"),
+              # Definimos la primera fila de objetos donde pondremos el grafico de burbujas,
+              # una mini pagina "fluidPage" que contiene los botones con total de donaciones y total de donante, y
+              # el grafico de tendencias de google
+              fluidRow(
+                # A static infoBox
+                infoBox("Donantes", 936, icon = icon("credit-card")),
+                # Dynamic infoBoxes
+                infoBoxOutput("progressBox"),
+                infoBoxOutput("approvalBox")
+              ),
+              
+              # infoBoxes with fill=TRUE
+              fluidRow(
+                infoBox("New Orders", 10 * 2, icon = icon("credit-card"), fill = TRUE),
+                infoBoxOutput("progressBox2"),
+                infoBoxOutput("approvalBox2")
+              ),
+              
+              #fluidRow(
+                # Clicking this will increment the progress amount
+              #  box(width = 4, actionButton("count", "Increment progress"))
+              #),
+              
+              fluidRow(
+                # Primer elemento con caja conteniendo grafico de burbujas      
+                box(
+                  solidHeader = TRUE, 
+                  title="Pobreza Multidimensional por Comuna",
+                  # Imprimimos grafico preparado en server.R con comando renderBubbles        
+                  bubblesOutput("burbujas", height="500px", width="400px")
+                ),
+                box(width = 2, solidHeader = TRUE,
+                    title = "Comunas",
+                    checkboxGroupInput("comunas","" ,levels(MetricasComuna$comuna), selected = levels(MetricasComuna$comuna))
+                ),
+                  # Caja con grafico tendencias de Google       
+                fluidRow(box(
+                    title = "Tendencias de Google",
+                    height = "500px",
+                    solidHeader = TRUE,
+                    plot_ly(gtrends, x = ~fecha, y = ~educacion, name = 'Importanci', type = 'scatter', mode = 'lines') %>%
+                      add_trace(y = ~salud, name = 'Salud', mode = 'lines+markers') %>%
+                      add_trace(y = ~infancia, name = 'Infancia', mode = 'lines+markers')
+                  ))
+              )
+              # Segunda fila con selector de categor??as y tabla de proyectos
+              #fluidRow(
+                # Caja con selector de categorias que define variable input$categorias ocupada en server.R      
+                #box(width = 2, status = "info", solidHeader = TRUE,
+                #    title = "Categorías",
+                #    checkboxGroupInput("categorias","" ,levels(Proyectos2016$categoria),selected=levels(Proyectos2016$categoria))
+                #),
+                # Caja con selector de comunas que define variable input$comunas ocupada en server.R      
+                
+                # Tabla con proyectos
+                #box(title = "Proyectos",
+                #    width = 8,
+                #    status = "info",
+                #    solidHeader = TRUE,
+                #    # Imprimimos tabla preparada en server.R con comando renderDataTable          
+                #    dataTableOutput('tabla'))
+              #)
       ),
 
 # Second tab content: reporte
-tabItem(tabName = "reporte",
+tabItem(tabName = "gestion",
         fluidPage(
           titlePanel("Intro"),
           
@@ -93,7 +110,7 @@ tabItem(tabName = "reporte",
 ),
 
 # Third tab content: stats
-tabItem(tabName = "stats",
+tabItem(tabName = "proyectos",
         fluidPage(
           titlePanel("Intro"),
           

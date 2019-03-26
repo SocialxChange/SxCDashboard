@@ -1,50 +1,51 @@
 .main-header .logo {
-  font-family: "Georgia", Times, "Times New Roman", serif;
-  font-weight: bold;
+  font-family: 'Lato', sans-serif;
+  /*font-weight: bold;*/
   font-size: 24px;
 }
 
 /* background color of header (logo part) */
 
 .skin-blue .main-header .logo {
-  background-color: #222b2e;
+  background-color: #2797C9;
 }
 
 /* change background color of header (logo part) on hover */
 
 .skin-blue .main-header .logo:hover {
-  background-color: orange;
+  background-color: #5BCBFD;
 }
 
 /* background color for remaining part of the header */
 .skin-blue .main-header .navbar {
-                              background-color: #67818a;
+                              background-color: #2797C9;
                               } 
                               
 /* main sidebar */
         .skin-blue .main-sidebar {
-                              background-color: #67818a;
+                              background-color: #2797C9;
                               }
 
 /* active sidebar menu item */
         .skin-blue .main-sidebar .sidebar .sidebar-menu .active a{
-                              background-color: white;
-                              color:black;
+                              background-color: #5BCBFD;
+                              color:#656565;
                               }
 
 /* sidebar menuitems */
         .skin-blue .main-sidebar .sidebar .sidebar-menu a{
-                              background-color: orange;
-                              color: black;
+                              background-color: #2797C9;
+                              color: #656565;
                               }
 
 /* sidebar menuitems when mouse hover */
          .skin-blue .main-sidebar .sidebar .sidebar-menu a:hover{
-                              background-color: brown;
-                              color:white;
+                              background-color: #5BCBFD;
+                              color:#656565;
                               }
                               
 /* sidebar toggle button */           
 .skin-blue .main-header .navbar .sidebar-toggle:hover{
-                              background-color: black;
+                              background-color: #5BCBFD;
                               }
+                              

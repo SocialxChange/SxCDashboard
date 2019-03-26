@@ -30,4 +30,32 @@ function(input, output) {
 # Tabla 1 Reporte
   output$tbl = renderDT(
     RankingMallPlaza, options = list(lengthChange = FALSE), rownames=FALSE, caption = "Tabla 1: Donaciones por Institución Beneficiaria, MM$") 
+  
+  output$progressBox <- renderInfoBox({
+    infoBox(
+      "Donaciones", paste(25 + input$count, "Millones", sep=" "), icon = icon("list"),
+      color = "purple"
+    )
+  })
+  output$approvalBox <- renderInfoBox({
+    infoBox(
+      "Beneficiarios", "80", icon = icon("thumbs-up", lib = "glyphicon"),
+      color = "yellow"
+    )
+  })
+  
+  # Same as above, but with fill=TRUE
+  output$progressBox2 <- renderInfoBox({
+    infoBox(
+      "Crecimiento", paste0(4 + input$count, "%"), icon = icon("list"),
+      color = "purple", fill = TRUE
+    )
+  })
+  output$approvalBox2 <- renderInfoBox({
+    infoBox(
+      "Cumplimiento", "80%", icon = icon("thumbs-up", lib = "glyphicon"),
+      color = "yellow", fill = TRUE
+    )
+  })
+  
   }
