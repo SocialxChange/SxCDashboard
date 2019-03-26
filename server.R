@@ -33,7 +33,7 @@ function(input, output) {
   
   output$progressBox <- renderInfoBox({
     infoBox(
-      "Donaciones", paste(25 + input$count, "Millones", sep=" "), icon = icon("list"),
+      "Donaciones", paste(25, "Millones", sep=" "), icon = icon("list"),
       color = "purple"
     )
   })
@@ -47,13 +47,13 @@ function(input, output) {
   # Same as above, but with fill=TRUE
   output$progressBox2 <- renderInfoBox({
     infoBox(
-      "Crecimiento", paste0(4 + input$count, "%"), icon = icon("list"),
+      "Crecimiento", paste(4, "%", sep=" "), icon = icon("list"),
       color = "purple", fill = TRUE
     )
   })
   output$approvalBox2 <- renderInfoBox({
     infoBox(
-      "Cumplimiento", "80%", icon = icon("thumbs-up", lib = "glyphicon"),
+      "Cumplimiento hitos", "87%", icon = icon("thumbs-up", lib = "glyphicon"),
       color = "yellow", fill = TRUE
     )
   })

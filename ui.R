@@ -7,7 +7,7 @@ dashboardPage(
 # Home      
       menuItem("Home", tabName = "home", icon = icon("dashboard")),
       menuItem("Gestión", tabName = "gestion", icon = icon("info-circle")),
-      menuItem("Proyectos", tabName = "proyectos", icon = icon("percentage")),
+      menuItem("Seguimiento", tabName = "seguimiento", icon = icon("list")),
 # Tabla general  llamada comparador      
       menuItem("Banco Proyectos", tabName = "comparador", icon = icon("th"))
     )
@@ -36,7 +36,7 @@ dashboardPage(
               
               # infoBoxes with fill=TRUE
               fluidRow(
-                infoBox("New Orders", 10 * 2, icon = icon("credit-card"), fill = TRUE),
+                infoBox("Proyectos", 10 * 2, icon = icon("credit-card"), fill = TRUE),
                 infoBoxOutput("progressBox2"),
                 infoBoxOutput("approvalBox2")
               ),
@@ -63,9 +63,13 @@ dashboardPage(
                     title = "Tendencias de Google",
                     height = "500px",
                     solidHeader = TRUE,
-                    plot_ly(gtrends, x = ~fecha, y = ~educacion, name = 'Importanci', type = 'scatter', mode = 'lines') %>%
+                    plot_ly(gtrends, x = ~fecha, y = ~educacion, name = 'Educación', type = 'scatter', mode = 'lines') %>%
                       add_trace(y = ~salud, name = 'Salud', mode = 'lines+markers') %>%
-                      add_trace(y = ~infancia, name = 'Infancia', mode = 'lines+markers')
+                      add_trace(y = ~infancia, name = 'Infancia', mode = 'lines+markers') %>%
+                      layout(
+                        xaxis=list(title="Tiempo"),
+                        yaxis=list(title="Importancia")
+                      )
                   ))
               )
               # Segunda fila con selector de categor??as y tabla de proyectos
@@ -90,7 +94,39 @@ dashboardPage(
 # Second tab content: reporte
 tabItem(tabName = "gestion",
         fluidPage(
-          titlePanel("Intro"),
+          titlePanel("Posicionamiento Indicadores Gestión"),
+          fluidRow(
+            box(title = "Perfil comparado",
+                width="auto", solidHeader = TRUE,
+                    plot_ly(
+                      type = 'scatterpolar',
+                      fill = 'toself'
+                    ) %>%
+                      add_trace(
+                        r = c(datos1,datos1[1]),
+                        theta = variables,
+                        name = 'Protectora de Todos'
+                      ) %>%
+                      add_trace(
+                        r = c(datos2,datos2[1]),
+                        theta = variables,
+                        name = 'Promedio organizaciones'
+                      ) %>%
+                      layout(
+                        polar = list(
+                          radialaxis = list(
+                            visible = T,
+                            range = c(0,100)
+                          )
+                        )
+                      )),
+                    # Caja con grafico donaciones XY
+                    box(
+                      title = "Monto Donaciones XY 2011-2016",
+                      width="auto", solidHeader = TRUE,
+                      plot_ly(Donaciones_MallPlaza, x = ~Year, y = ~MontoTotal, name = 'Donación', type = 'scatter', mode = 'lines')
+                    )
+          ),
           
           navlistPanel(
             "",
@@ -103,16 +139,16 @@ tabItem(tabName = "gestion",
             "Header B",
             tabPanel("Component 3"),
             tabPanel("Component 4"),
-            "-----",
-            DTOutput('tbl')
+            "-----"
+            
           )
        )
 ),
 
 # Third tab content: stats
-tabItem(tabName = "proyectos",
+tabItem(tabName = "seguimiento",
         fluidPage(
-          titlePanel("Intro"),
+          titlePanel("Cumplimiento y Validación Hitos"),
           
           navlistPanel(
             "",
@@ -121,12 +157,7 @@ tabItem(tabName = "proyectos",
             tabPanel("Component 3"),
             tabPanel("Component 4"),
             "-----",
-            # Caja con grafico donaciones XY    
-            box(
-              title = "Monto Donaciones XY 2011-2016",
-              width="auto", status= "info", solidHeader = TRUE,
-              plot_ly(Donaciones_MallPlaza, x = ~Year, y = ~MontoTotal, name = 'Donación', type = 'scatter', mode = 'lines')
-            )
+            DTOutput('tbl')
             )
             )
 ),

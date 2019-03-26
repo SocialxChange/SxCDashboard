@@ -18,3 +18,7 @@ load(paste(PathDatos,"Prototipo.RData",sep=""))
 load(paste(PathDatos,"20180920RankingMallPlaza2009_2016.RData",sep=""))
 #Generada por  Mall_Plaza.R 
 load(paste(PathDatos,"20180920Donaciones_MallPlaza2009_2016.RData",sep=""))
+
+variables<-c(LETTERS[1:20],'A')
+datos1<-runif(20)*100
+datos2<-runif(20)*100
