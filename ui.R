@@ -2,16 +2,17 @@ dashboardPage(
 # Definimos el encabezado del sitio
     dashboardHeader(title = "Reporte SxC"),
 # Definimos la barra de navegaci??n del lado izquierdo
-  dashboardSidebar(
-    sidebarMenu(
-# Home      
-      menuItem("Home", tabName = "home", icon = icon("dashboard")),
-      menuItem("Gestión", tabName = "gestion", icon = icon("info-circle")),
-      menuItem("Seguimiento", tabName = "seguimiento", icon = icon("list")),
-# Tabla general  llamada comparador      
-      menuItem("Banco Proyectos", tabName = "comparador", icon = icon("th"))
-    )
-  ),
+dashboardSidebar(
+  sidebarMenu(id = 'sidebarmenu',
+    menuItem("Home", tabName = "home", icon = icon("dashboard")),
+    menuItem('FIS', tabName = 'fis', icon = icon('list'),
+            menuSubItem('Proyectos',tabName = 'proyectos', icon = icon('line-chart'))),
+    menuItem('HUB', tabName = 'hub', icon = icon('th'),
+            menuSubItem('Organizaciones', tabName = 'organizaciones', icon = icon('line-chart')))
+            )),
+
+
+
 # Definimos lo que se mostrar?? en el cuerpo central del sitio
   dashboardBody(
     tags$head(
