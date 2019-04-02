@@ -3,8 +3,8 @@ function(input, output) {
   output$cuantas <- renderValueBox({
     valueBox(
       value = sum(Proyectos2016$nDonaciones),
-      subtitle = "Total donantes",
-      icon = icon("users")
+      subtitle = "Inversión Social Total",
+      icon = icon("fas fa-igloo")
     )
   })
 # Valor del total de donaciones  
@@ -33,13 +33,13 @@ function(input, output) {
   
   output$progressBox <- renderInfoBox({
     infoBox(
-      "Donaciones", paste(25, "Millones", sep=" "), icon = icon("list"),
+      "Inversión Social Total", paste(25, "Mil Millones", sep=" "), icon = icon("fas fa-money-bill-wave-alt"),
       color = "purple"
     )
   })
   output$approvalBox <- renderInfoBox({
     infoBox(
-      "Beneficiarios", "80", icon = icon("thumbs-up", lib = "glyphicon"),
+      "Beneficiarios", "800 Millones", icon = icon("fas fa-users"),
       color = "yellow"
     )
   })
@@ -47,7 +47,7 @@ function(input, output) {
   # Same as above, but with fill=TRUE
   output$progressBox2 <- renderInfoBox({
     infoBox(
-      "Crecimiento", paste(4, "%", sep=" "), icon = icon("list"),
+      "Crecimiento", paste(4, "%", sep=" "), icon = icon("fas fa-chart-line"),
       color = "purple", fill = TRUE
     )
   })

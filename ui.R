@@ -12,7 +12,6 @@ dashboardSidebar(
             )),
 
 
-
 # Definimos lo que se mostrar?? en el cuerpo central del sitio
   dashboardBody(
     tags$head(
@@ -23,13 +22,13 @@ dashboardSidebar(
 # First tab content: relacionado al boton de home de la barra de navegaci??n
       #includeScript("tabs/home.R"),
       tabItem(tabName = "home",
-              h2("Protectora de todos"),
+              h2("Fundación Colunga"),
               # Definimos la primera fila de objetos donde pondremos el grafico de burbujas,
               # una mini pagina "fluidPage" que contiene los botones con total de donaciones y total de donante, y
               # el grafico de tendencias de google
               fluidRow(
                 # A static infoBox
-                infoBox("Donantes", 936, icon = icon("credit-card")),
+                infoBox("Cantidad de Organizaciones", "50 mil millones", icon = icon("fas fa-sitemap")),
                 # Dynamic infoBoxes
                 infoBoxOutput("progressBox"),
                 infoBoxOutput("approvalBox")
@@ -37,7 +36,7 @@ dashboardSidebar(
               
               # infoBoxes with fill=TRUE
               fluidRow(
-                infoBox("Proyectos", 10 * 2, icon = icon("credit-card"), fill = TRUE),
+                infoBox("Cantidad de proyectos", 50, icon = icon("fas fa-project-diagram"), fill = TRUE),
                 infoBoxOutput("progressBox2"),
                 infoBoxOutput("approvalBox2")
               ),
@@ -58,6 +57,10 @@ dashboardSidebar(
                 box(width = 2, solidHeader = TRUE,
                     title = "Comunas",
                     checkboxGroupInput("comunas","" ,levels(MetricasComuna$comuna), selected = levels(MetricasComuna$comuna))
+                ),
+                box(width = 2, solidHeader = TRUE,
+                    title = "Año",
+                    checkboxGroupInput("Año","" ,levels(as.factor(colunga$`AÑO ASIGNACION`)), selected = levels(as.factor(colunga$`AÑO ASIGNACION`)))
                 ),
                   # Caja con grafico tendencias de Google       
                 fluidRow(box(
