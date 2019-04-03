@@ -2,7 +2,7 @@ function(input, output) {
 # Definimos valores de los botones con total donantes y total donaciones  
   output$cuantas <- renderValueBox({
     valueBox(
-      value = sum(Proyectos2016$nDonaciones),
+      value = sum(colunga$`MONTO APORTE (CONVENIO)`[!is.na(colunga$`MONTO APORTE (CONVENIO)`)])/1000000,
       subtitle = "Inversión Social Total",
       icon = icon("fas fa-igloo")
     )
@@ -32,8 +32,9 @@ function(input, output) {
     RankingMallPlaza, options = list(lengthChange = FALSE), rownames=FALSE, caption = "Tabla 1: Donaciones por Institución Beneficiaria, MM$") 
   
   output$progressBox <- renderInfoBox({
+    dfyear<-filter(colunga[,c(4,15,18)], colunga$`AÑO ASIGNACION` %in% input$year)
     infoBox(
-      "Inversión Social Total", paste(25, "Mil Millones", sep=" "), icon = icon("fas fa-money-bill-wave-alt"),
+      "Inversión Social Total", paste(round(sum(dfyear$`MONTO APORTE (CONVENIO)`[!is.na(dfyear$`MONTO APORTE (CONVENIO)`)])/1000000, digits=0), "Millones", sep=" "), icon = icon("fas fa-money-bill-wave-alt"),
       color = "purple"
     )
   })

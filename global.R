@@ -8,7 +8,8 @@ library(DT)
 library(colorspace)
 library(scales)
 
-
+options(digits=2)
+options(scipen=100)
 
 
 

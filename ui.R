@@ -60,7 +60,7 @@ dashboardSidebar(
                 ),
                 box(width = 2, solidHeader = TRUE,
                     title = "Año",
-                    checkboxGroupInput("Año","" ,levels(as.factor(colunga$`AÑO ASIGNACION`)), selected = levels(as.factor(colunga$`AÑO ASIGNACION`)))
+                    checkboxGroupInput("year","" ,levels(as.factor(colunga$`AÑO ASIGNACION`)), selected = levels(as.factor(colunga$`AÑO ASIGNACION`)))
                 ),
                   # Caja con grafico tendencias de Google       
                 fluidRow(box(
