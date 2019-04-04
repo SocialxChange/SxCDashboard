@@ -24,6 +24,10 @@ load(paste(PathDatos,"colunga.RData",sep=""))
 # Cambio nombre colunga$`EVALUACION EFECTIVIDAD AÑO 0 (enero 2017`
 colnames(colunga)[30] <- "Efectividad02017"
 colunga$Efectividad02017<-as.numeric(colunga$Efectividad02017)
+colunga$REGION[which(colunga$REGION=="Bío - Bío" | 
+                       colunga$REGION=="Bio Bio" | 
+                       colunga$REGION=="Bío Bío" | 
+                       colunga$REGION=="Biobio")]<-"Bío Bío"
 
 variables<-c(LETTERS[1:20],'A')
 datos1<-runif(20)*100
