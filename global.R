@@ -21,6 +21,9 @@ load(paste(PathDatos,"20180920RankingMallPlaza2009_2016.RData",sep=""))
 load(paste(PathDatos,"20180920Donaciones_MallPlaza2009_2016.RData",sep=""))
 #Importada de planilla de Arturo Celedon
 load(paste(PathDatos,"colunga.RData",sep=""))
+# Cambio nombre colunga$`EVALUACION EFECTIVIDAD AÑO 0 (enero 2017`
+colnames(colunga)[30] <- "Efectividad02017"
+colunga$Efectividad02017<-as.numeric(colunga$Efectividad02017)
 
 variables<-c(LETTERS[1:20],'A')
 datos1<-runif(20)*100

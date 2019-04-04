@@ -46,6 +46,26 @@ dashboardSidebar(
               #  box(width = 4, actionButton("count", "Increment progress"))
               #),
               
+# Fluid Row Desempeño Colunga
+              
+              fluidRow(
+                # Primer elemento con caja conteniendo grafico de burbujas      
+                box(
+                #  solidHeader = TRUE, 
+                  title="Efectividad",
+                  # Imprimimos grafico preparado en server.R con comando renderBubbles        
+                  bubblesOutput("burbujasC", height="500px", width="400px")
+                ),
+                box(width = 2, solidHeader = TRUE,
+                    title = "Ubicación",
+                    checkboxGroupInput("location","" ,levels(as.factor(colunga$REGION)), selected = levels(as.factor(colunga$REGION)))
+                ),
+                box(width = 2, solidHeader = TRUE,
+                    title = "Año",
+                    checkboxGroupInput("year","" ,levels(as.factor(colunga$`AÑO ASIGNACION`)), selected = levels(as.factor(colunga$`AÑO ASIGNACION`)))
+                )
+              ),
+# Fluid Row POBREZA
               fluidRow(
                 # Primer elemento con caja conteniendo grafico de burbujas      
                 box(
@@ -58,24 +78,21 @@ dashboardSidebar(
                     title = "Comunas",
                     checkboxGroupInput("comunas","" ,levels(MetricasComuna$comuna), selected = levels(MetricasComuna$comuna))
                 ),
-                box(width = 2, solidHeader = TRUE,
-                    title = "Año",
-                    checkboxGroupInput("year","" ,levels(as.factor(colunga$`AÑO ASIGNACION`)), selected = levels(as.factor(colunga$`AÑO ASIGNACION`)))
-                ),
-                  # Caja con grafico tendencias de Google       
+                # Caja con grafico tendencias de Google       
                 fluidRow(box(
-                    title = "Tendencias de Google",
-                    height = "500px",
-                    solidHeader = TRUE,
-                    plot_ly(gtrends, x = ~fecha, y = ~educacion, name = 'Educación', type = 'scatter', mode = 'lines') %>%
-                      add_trace(y = ~salud, name = 'Salud', mode = 'lines+markers') %>%
-                      add_trace(y = ~infancia, name = 'Infancia', mode = 'lines+markers') %>%
-                      layout(
-                        xaxis=list(title="Tiempo"),
-                        yaxis=list(title="Importancia")
-                      )
-                  ))
-              )
+                  title = "Tendencias de Google",
+                  height = "500px",
+                  solidHeader = TRUE,
+                  plot_ly(gtrends, x = ~fecha, y = ~educacion, name = 'Educación', type = 'scatter', mode = 'lines') %>%
+                    add_trace(y = ~salud, name = 'Salud', mode = 'lines+markers') %>%
+                    add_trace(y = ~infancia, name = 'Infancia', mode = 'lines+markers') %>%
+                    layout(
+                      xaxis=list(title="Tiempo"),
+                      yaxis=list(title="Importancia")
+                    )
+                ))
+              )            
+
               # Segunda fila con selector de categor??as y tabla de proyectos
               #fluidRow(
                 # Caja con selector de categorias que define variable input$categorias ocupada en server.R      

@@ -15,7 +15,17 @@ function(input, output) {
       icon = icon("hand-holding-usd", lib = "font-awesome")
     )
   })
-# Definimos el grafico de burbujas  
+# Definimos el grafico de burbujas Colunga 
+  output$burbujasC <- renderBubbles({
+    dfefec<-filter(colunga[,c(9,15,30)], colunga$REGION %in% input$location)
+    dfefecAg<-aggregate(Efectividad02017 ~ REGION, data=dfefec, sum)
+    
+    
+    bubbles(dfefecAg$Efectividad02017, dfefecAg$REGION, 
+            color=sequential_hcl(nrow(dfefecAg), h = col2rgb("#efc000")), #rainbow(nrow(df), alpha = NULL)
+            textColor = "#FFFFFF")
+  })
+  # Definimos el grafico de burbujas Pobreza 
   output$burbujas <- renderBubbles({
     df<-filter(MetricasComuna[,c(1,3)], MetricasComuna$comuna %in% input$comunas)
     
