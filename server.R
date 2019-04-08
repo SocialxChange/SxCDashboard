@@ -50,7 +50,7 @@ function(input, output) {
   })
   output$approvalBox <- renderInfoBox({
     infoBox(
-      "Beneficiarios", "800 Millones", icon = icon("fas fa-users"),
+      "Beneficiarios", "832", icon = icon("fas fa-users"),
       color = "yellow"
     )
   })
