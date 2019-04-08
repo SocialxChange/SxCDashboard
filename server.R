@@ -42,9 +42,9 @@ function(input, output) {
     RankingMallPlaza, options = list(lengthChange = FALSE), rownames=FALSE, caption = "Tabla 1: Donaciones por Institución Beneficiaria, MM$") 
   
   output$progressBox <- renderInfoBox({
-    dfyear<-filter(colunga[,c(4,15,18)], colunga$`AÑO ASIGNACION` %in% input$year)
+    dfyear<-filter(colunga[,c(4,15,18)], colunga$AnioAsignacion %in% input$year)
     infoBox(
-      "Inversión Social Total", paste(round(sum(dfyear$`MONTO APORTE (CONVENIO)`[!is.na(dfyear$`MONTO APORTE (CONVENIO)`)])/1000000, digits=0), "Millones", sep=" "), icon = icon("fas fa-money-bill-wave-alt"),
+      "Inversión Social Total", paste(round(sum(dfyear$AporteConvenio[!is.na(dfyear$AporteConvenio)])/1000000, digits=0), "Millones", sep=" "), icon = icon("fas fa-money-bill-wave-alt"),
       color = "purple"
     )
   })
@@ -69,4 +69,36 @@ function(input, output) {
     )
   })
   
+  #MAPA seccion FIS Proyectos
+  output$mymap <- renderLeaflet({
+    m <- leaflet() %>%
+      addTiles() %>%
+      setView(lng=-71.5429688, lat=-35.675148 , zoom=5)
+    m
+  })
+ # output$mymap <- renderLeaflet({
+#    colunga <- data()
+    
+#    m <- leaflet(data = colunga) %>%
+#      addTiles() %>%
+#      addMarkers(lng = ~longitud,
+#                 lat = ~latitud)
+#    m
+#  })
+    
   }
+
+
+#output$mymap <- renderLeaflet({
+#colunga <- data()
+
+#m <- leaflet(data = colunga) %>%
+ # addTiles() %>%
+  #addMarkers(lng = ~longitud,
+   #          lat = ~latitud,
+    #         popup = paste("Region", colunga$REGION, "<br>",
+     #                      ":Año", colunga$AnioAsignacion))
+#m
+#})
+
+

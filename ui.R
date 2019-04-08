@@ -6,7 +6,9 @@ dashboardSidebar(
   sidebarMenu(id = 'sidebarmenu',
     menuItem("Home", tabName = "home", icon = icon("dashboard")),
     menuItem('FIS', tabName = 'fis', icon = icon('list'),
-            menuSubItem('Proyectos',tabName = 'proyectos', icon = icon('line-chart'))),
+             menuSubItem('Home FIS',tabName = 'homefis', icon = icon('line-chart')),
+             menuSubItem('Proyectos',tabName = 'proyectos', icon = icon('line-chart'))
+             ),
     menuItem('HUB', tabName = 'hub', icon = icon('th'),
             menuSubItem('Organizaciones', tabName = 'organizaciones', icon = icon('line-chart')))
             )),
@@ -28,7 +30,7 @@ dashboardSidebar(
               # el grafico de tendencias de google
               fluidRow(
                 # A static infoBox
-                infoBox("Cantidad de Organizaciones", "50 mil millones", icon = icon("fas fa-sitemap")),
+                infoBox("Cantidad de Organizaciones", "45", icon = icon("fas fa-sitemap")),
                 # Dynamic infoBoxes
                 infoBoxOutput("progressBox"),
                 infoBoxOutput("approvalBox")
@@ -62,7 +64,7 @@ dashboardSidebar(
                 ),
                 box(width = 2, solidHeader = TRUE,
                     title = "Año",
-                    checkboxGroupInput("year","" ,levels(as.factor(colunga$`AÑO ASIGNACION`)), selected = levels(as.factor(colunga$`AÑO ASIGNACION`)))
+                    checkboxGroupInput("year","" ,levels(as.factor(colunga$AnioAsignacion)), selected = levels(as.factor(colunga$AnioAsignacion)))
                 )
               ),
 # Fluid Row POBREZA
@@ -112,57 +114,49 @@ dashboardSidebar(
               #)
       ),
 
-# Second tab content: reporte
-tabItem(tabName = "gestion",
+# Second tab content: FIS
+tabItem(tabName = "homefis",
         fluidPage(
-          titlePanel("Posicionamiento Indicadores Gestión"),
+          titlePanel("Proyectos Financiados"),
           fluidRow(
-            box(title = "Perfil comparado",
+            box(
+              leafletOutput("mymap",height = 900)
+              )),
+          fluidRow(
+            box(title = "Proyectos Financiados Por Área Por Año",
                 width="auto", solidHeader = TRUE,
-                    plot_ly(
-                      type = 'scatterpolar',
-                      fill = 'toself'
-                    ) %>%
-                      add_trace(
-                        r = c(datos1,datos1[1]),
-                        theta = variables,
-                        name = 'Protectora de Todos'
-                      ) %>%
-                      add_trace(
-                        r = c(datos2,datos2[1]),
-                        theta = variables,
-                        name = 'Promedio organizaciones'
-                      ) %>%
-                      layout(
-                        polar = list(
-                          radialaxis = list(
-                            visible = T,
-                            range = c(0,100)
-                          )
-                        )
-                      )),
+                plot_ly(
+                  type = 'scatterpolar',
+                  fill = 'toself'
+                ) %>%
+                  add_trace(
+                    r = c(datos1,datos1[1]),
+                    theta = variables,
+                    name = '2018'
+                  ) %>%
+                  add_trace(
+                    r = c(datos2,datos2[1]),
+                    theta = variables,
+                    name = '2019'
+                  ) %>%
+                  layout(
+                    polar = list(
+                      radialaxis = list(
+                        visible = T,
+                        range = c(0,100)
+                      )
+                    )
+                  ))
+          ),
+          fluidRow(
                     # Caja con grafico donaciones XY
                     box(
-                      title = "Monto Donaciones XY 2011-2016",
+                      title = "Financiamiento vs Efectividad Promedio",
                       width="auto", solidHeader = TRUE,
-                      plot_ly(Donaciones_MallPlaza, x = ~Year, y = ~MontoTotal, name = 'Donación', type = 'scatter', mode = 'lines')
+                      plot_ly(colunga, x = ~AnioAsignacion, y = ~AporteConvenio, name = 'Monto Financiado', type = 'scatter', mode = 'lines')
                     )
-          ),
-          
-          navlistPanel(
-            "",
-            tabPanel("Este es el informe tipo de SocialxChange para nuestro clientes, en este se incluye un breve análisis de los programas y temáticas en las que nuestros clientes estan donando, del desempeño social de los programas realizados de manera directa o a través de la gestión de terceras parte y recomendaciones para aumentar su impacto social.
-
-                     XY, la gestión social se basa en una serie de componentes los que incluyen involucramiento local (Espacio Comunidad) e Inversión social. En el contexto de involucramiento con la comunidad, los centros comerciales buscan ser un lugar de encuentro y de visualizacion de proyectos y emprendimientos sociales. Por otra parte, en el caso de inversión social XY busca apoyar a las comunidades vulnerables cercanas a sus centros.  
-                     
-                     La siguiente tabla muestra las donaciones realizadas por XY desde 2009 a 2016, donde se aprecian los montos de las donaciones por año a cada institución, y los porcentajes de montos respecto a cada año. En términos de monto, la Fundación Acción Social Goreti (actual Junto Al Barrio, JAB) es la principal receptora de donaciones. En el caso de la Fundación Educacional Cerro Navia sólo se perciben montos en el año 2011. 
-                     "),
-            "Header B",
-            tabPanel("Component 3"),
-            tabPanel("Component 4"),
-            "-----"
-            
           )
+       
        )
 ),
 
