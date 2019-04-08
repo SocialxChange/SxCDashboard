@@ -119,10 +119,11 @@ tabItem(tabName = "homefis",
         fluidPage(
           titlePanel("Proyectos Financiados"),
           fluidRow(
+            column(6,
             box(
               leafletOutput("mymap",height = 900)
               )),
-          fluidRow(
+            column(5,
             box(title = "Proyectos Financiados Por Área Por Año",
                 width="auto", solidHeader = TRUE,
                 plot_ly(
@@ -143,18 +144,23 @@ tabItem(tabName = "homefis",
                     polar = list(
                       radialaxis = list(
                         visible = T,
-                        range = c(0,100)
-                      )
+                        range = c(0,100))
                     )
-                  ))
+                  )),
+            box(
+              title = "Financiamiento vs Efectividad Promedio",
+              width="auto", solidHeader = TRUE,
+              plot_ly(colunga, x = ~AnioAsignacion, y = ~AporteConvenio, name = 'Monto Financiado', type = 'scatter')
+            )
+            )
           ),
           fluidRow(
-                    # Caja con grafico donaciones XY
-                    box(
-                      title = "Financiamiento vs Efectividad Promedio",
-                      width="auto", solidHeader = TRUE,
-                      plot_ly(colunga, x = ~AnioAsignacion, y = ~AporteConvenio, name = 'Monto Financiado', type = 'scatter', mode = 'lines')
-                    )
+            # Caja con grafico donaciones XY
+            box(
+              title = "Financiamiento por año",
+              width="auto", solidHeader = TRUE,
+              plot_ly(data.frame(datos5,datos6), x = ~datos6, y = ~datos5, name = 'Monto Financiado', type = 'scatter', mode = 'lines')
+            )
           )
        
        )

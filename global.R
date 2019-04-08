@@ -76,3 +76,7 @@ colunga$REGION[which(colunga$REGION=="nacional")]<-"Nacional"
 variables<-c(LETTERS[1:20],'A')
 datos1<-runif(20)*100
 datos2<-runif(20)*100
+datos3<-runif(20)*100
+datos4<-runif(20)*100
+datos5<-runif(5)*100
+datos6<-c(2014:2018)
