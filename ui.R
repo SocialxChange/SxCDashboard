@@ -7,7 +7,8 @@ dashboardSidebar(
     menuItem("Home", tabName = "home", icon = icon("dashboard")),
     menuItem('Becas', tabName = 'becas', icon = icon('list'),
              menuSubItem('Home Becas',tabName = 'homebecas', icon = icon('line-chart')),
-             menuSubItem('Beneficiarios',tabName = 'beneficiarios', icon = icon('line-chart'))
+             menuSubItem('Beneficiarios',tabName = 'beneficiarios', icon = icon('line-chart')),
+             menuSubItem('Carreras',tabName = 'carreras', icon = icon('line-chart'))
              )
     #,
     #menuItem('HUB', tabName = 'hub', icon = icon('th'),
@@ -176,10 +177,14 @@ tabItem(tabName = "beneficiarios",
             )
 ),
 
-# Fourth tab content: definimos el contenido de la página definida en la barra lateral llamada comparador
-  tabItem(tabName = "comparador",
+# Fourth tab content: datos carreras de beneficiarios
+  tabItem(tabName = "carreras",
 # Imprimimos tabla preparada en server.R con comando renderDataTable          
-          fluidRow(dataTableOutput('comparador'))
+fluidPage(
+  titlePanel("Carreras de Personas beneficiadas por programa"),
+  DTOutput('tblcarreras')
+  
+)
         )
 ))
 )

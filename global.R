@@ -17,14 +17,15 @@ options(digits=2)
 options(scipen=100)
 
 
-carreras <- read_excel("~/Google Drive/Proyectos/BHP/BHPDashBoard/Buscador-empleabilidad-e-ingresos_mifuturo_2020.xlsx")
-carreras<- carreras[1:(nrow(carreras)-3),]
+
 
 
 PathDatos<-"datos/"
 
 nomina <- read_delim(paste(PathDatos,"nomina.csv",sep=""), 
                      ";", escape_double = FALSE, trim_ws = TRUE)
+carreras <- read_excel(paste(PathDatos,"Buscador-empleabilidad-e-ingresos_mifuturo_2020.xlsx",sep=""))
+carreras<- carreras[1:(nrow(carreras)-3),]
 load(paste(PathDatos,"Prototipo.RData",sep=""))
 #Generada luego de linea 87 en Mall_Plaza.Rmd
 load(paste(PathDatos,"20180920RankingMallPlaza2009_2016.RData",sep=""))

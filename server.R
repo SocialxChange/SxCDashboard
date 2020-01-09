@@ -41,6 +41,10 @@ function(input, output) {
   output$tbl = renderDT(
     nomina, options = list(lengthChange = FALSE), rownames=FALSE, caption = "Carreras por beneficiario") 
   
+  output$tblcarreras = renderDT(
+    carreras %>% filter(`Nombre carrera genérica` %in% levels(as.factor(nomina$Carrera))), 
+    options = list(lengthChange = FALSE), rownames=FALSE, caption = "Carreras por beneficiario")
+  
   output$progressBox <- renderInfoBox({
     dfyear<-filter(colunga[,c(4,15,18)], colunga$AnioAsignacion %in% input$year)
     infoBox(
