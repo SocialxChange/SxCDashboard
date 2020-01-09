@@ -1,16 +1,17 @@
 dashboardPage(
 # Definimos el encabezado del sitio
-    dashboardHeader(title = "Reporte SxC"),
+    dashboardHeader(title = "Dashboard BHP"),
 # Definimos la barra de navegaci??n del lado izquierdo
 dashboardSidebar(
   sidebarMenu(id = 'sidebarmenu',
     menuItem("Home", tabName = "home", icon = icon("dashboard")),
-    menuItem('FIS', tabName = 'fis', icon = icon('list'),
-             menuSubItem('Home FIS',tabName = 'homefis', icon = icon('line-chart')),
-             menuSubItem('Proyectos',tabName = 'proyectos', icon = icon('line-chart'))
-             ),
-    menuItem('HUB', tabName = 'hub', icon = icon('th'),
-            menuSubItem('Organizaciones', tabName = 'organizaciones', icon = icon('line-chart')))
+    menuItem('Becas', tabName = 'becas', icon = icon('list'),
+             menuSubItem('Home Becas',tabName = 'homebecas', icon = icon('line-chart')),
+             menuSubItem('Beneficiarios',tabName = 'beneficiarios', icon = icon('line-chart'))
+             )
+    #,
+    #menuItem('HUB', tabName = 'hub', icon = icon('th'),
+     #       menuSubItem('Organizaciones', tabName = 'organizaciones', icon = icon('line-chart')))
             )),
 
 
@@ -24,7 +25,7 @@ dashboardSidebar(
 # First tab content: relacionado al boton de home de la barra de navegaci??n
       #includeScript("tabs/home.R"),
       tabItem(tabName = "home",
-              h2("Fundación Colunga"),
+              h2("Región Antofagasta"),
               # Definimos la primera fila de objetos donde pondremos el grafico de burbujas,
               # una mini pagina "fluidPage" que contiene los botones con total de donaciones y total de donante, y
               # el grafico de tendencias de google
@@ -115,16 +116,16 @@ dashboardSidebar(
       ),
 
 # Second tab content: FIS
-tabItem(tabName = "homefis",
+tabItem(tabName = "homebecas",
         fluidPage(
-          titlePanel("Proyectos Financiados"),
+          titlePanel("Becas Financiadas"),
           fluidRow(
-            column(6,
+            column(10,
             box(
-              leafletOutput("mymap",height = 900)
+              leafletOutput("mymap",height = 200, width = 200)
               )),
             column(5,
-            box(title = "Proyectos Financiados Por Área Por Año",
+            box(title = "Becas Financiados Por Área Por Año",
                 width="auto", solidHeader = TRUE,
                 plot_ly(
                   type = 'scatterpolar',
@@ -167,19 +168,11 @@ tabItem(tabName = "homefis",
 ),
 
 # Third tab content: stats
-tabItem(tabName = "seguimiento",
+tabItem(tabName = "beneficiarios",
         fluidPage(
-          titlePanel("Cumplimiento y Validación Hitos"),
+          titlePanel("Personas beneficiadas por programa"),
+          DTOutput('tbl')
           
-          navlistPanel(
-            "",
-            tabPanel("En los siguientes gráficos se ve las donaciones realizadas por XY por año y por filial en el marco de la ley de donaciones sociales. Se observa que desde 2009 a la fecha, existio un peak en terminos de monto de donaciones el año 2016. En terminos del promedio de montos, estos se situan en el rango de 0 a 30 millones."),
-            "Header B",
-            tabPanel("Component 3"),
-            tabPanel("Component 4"),
-            "-----",
-            DTOutput('tbl')
-            )
             )
 ),
 

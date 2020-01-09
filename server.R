@@ -39,7 +39,7 @@ function(input, output) {
   output$comparador<-renderDataTable(Proyectos2016)
 # Tabla 1 Reporte
   output$tbl = renderDT(
-    RankingMallPlaza, options = list(lengthChange = FALSE), rownames=FALSE, caption = "Tabla 1: Donaciones por Institución Beneficiaria, MM$") 
+    nomina, options = list(lengthChange = FALSE), rownames=FALSE, caption = "Carreras por beneficiario") 
   
   output$progressBox <- renderInfoBox({
     dfyear<-filter(colunga[,c(4,15,18)], colunga$AnioAsignacion %in% input$year)
@@ -73,7 +73,7 @@ function(input, output) {
   output$mymap <- renderLeaflet({
     m <- leaflet() %>%
       addTiles() %>%
-      setView(lng=-71.5429688, lat=-35.675148 , zoom=5)
+      setView(lng=-69.3166, lat=-22.8833 , zoom=12)
     m
   })
  # output$mymap <- renderLeaflet({
