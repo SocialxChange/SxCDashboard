@@ -52,6 +52,26 @@ function(input, output) {
       color = "purple"
     )
   })
+  
+  output$barchart <- renderPlotly({
+    y <- c('género', 'localidad', 'año')
+    SF_Zoo <- c(20, 14, 23)
+    LA_Zoo <- c(12, 18, 29)
+    data <- data.frame(y, SF_Zoo, LA_Zoo)
+    
+    plot_ly(data, x = ~SF_Zoo, y = ~y, type = 'bar', orientation = 'h', name = 'SF Zoo',
+                 marker = list(color = 'rgba(246, 78, 139, 0.6)',
+                               line = list(color = 'rgba(246, 78, 139, 1.0)',
+                                           width = 3))) %>%
+      add_trace(x = ~LA_Zoo, name = 'LA Zoo',
+                marker = list(color = 'rgba(58, 71, 80, 0.6)',
+                              line = list(color = 'rgba(58, 71, 80, 1.0)',
+                                          width = 3))) %>%
+      layout(barmode = 'stack',
+             xaxis = list(title = ""),
+             yaxis = list(title =""))
+  })
+  
   output$approvalBox <- renderInfoBox({
     infoBox(
       "Beneficiarios", "832", icon = icon("fas fa-users"),
