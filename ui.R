@@ -119,19 +119,17 @@ dashboardSidebar(
 # Second tab content: FIS
 tabItem(tabName = "homebecas",
         fluidPage(
-          flowLayout(
-            plotlyOutput("barchart", width = "600px")
-          ),
-          flowLayout(
-            leafletOutput("mymap"),
+          fluidRow(infoBox("Estudiantes", 168, icon = icon("fas fa-project-diagram"), fill = TRUE),
+                   box(title = "Distribución Beneficiarios", status = "primary", collapsible = TRUE, 
+                       plotlyOutput("barchart", height = "400px"))),
+          fluidRow(
             plot_ly(data.frame(datos5,datos6),x = ~datos6, y = ~datos5,
                     name = 'Monto Financiado',
                     type = 'scatter', mode = 'lines'
             )
           ),
-          fluidRow(infoBox("Estudiantes", 168, icon = icon("fas fa-project-diagram"), fill = TRUE)),
-          flowLayout(
-            
+          fluidRow(
+            leafletOutput("mymap"),
           )
        
        )
