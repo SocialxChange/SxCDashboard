@@ -119,50 +119,19 @@ dashboardSidebar(
 # Second tab content: FIS
 tabItem(tabName = "homebecas",
         fluidPage(
-          titlePanel("Becas Financiadas"),
-          fluidRow(
-            column(10,
-            box(
-              leafletOutput("mymap",height = 200, width = 200)
-              )),
-            column(5,
-            box(title = "Becas Financiados Por Área Por Año",
-                width="auto", solidHeader = TRUE,
-                plot_ly(
-                  type = 'scatterpolar',
-                  fill = 'toself'
-                ) %>%
-                  add_trace(
-                    r = c(datos1,datos1[1]),
-                    theta = variables,
-                    name = '2018'
-                  ) %>%
-                  add_trace(
-                    r = c(datos2,datos2[1]),
-                    theta = variables,
-                    name = '2019'
-                  ) %>%
-                  layout(
-                    polar = list(
-                      radialaxis = list(
-                        visible = T,
-                        range = c(0,100))
-                    )
-                  )),
-            box(
-              title = "Financiamiento vs Efectividad Promedio",
-              width="auto", solidHeader = TRUE,
-              plot_ly(colunga, x = ~AnioAsignacion, y = ~AporteConvenio, name = 'Monto Financiado', type = 'scatter')
-            )
+          flowLayout(
+            plotlyOutput("barchart", width = "600px")
+          ),
+          flowLayout(
+            leafletOutput("mymap"),
+            plot_ly(data.frame(datos5,datos6),x = ~datos6, y = ~datos5,
+                    name = 'Monto Financiado',
+                    type = 'scatter', mode = 'lines'
             )
           ),
-          fluidRow(
-            # Caja con grafico donaciones XY
-            box(
-              title = "Financiamiento por año",
-              width="auto", solidHeader = TRUE,
-              plot_ly(data.frame(datos5,datos6), x = ~datos6, y = ~datos5, name = 'Monto Financiado', type = 'scatter', mode = 'lines')
-            )
+          fluidRow(infoBox("Estudiantes", 168, icon = icon("fas fa-project-diagram"), fill = TRUE)),
+          flowLayout(
+            
           )
        
        )
