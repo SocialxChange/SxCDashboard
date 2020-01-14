@@ -27,6 +27,10 @@ nomina <- read_delim(paste(PathDatos,"nomina.csv",sep=""),
 carreras <- read_excel(paste(PathDatos,"Buscador-empleabilidad-e-ingresos_mifuturo_2020.xlsx",sep=""))
 carreras<- carreras[1:(nrow(carreras)-3),]
 load(paste(PathDatos,"Prototipo.RData",sep=""))
+load(paste(PathDatos,"Censo_SG.RDa",sep=""))
+
+
+
 #Generada luego de linea 87 en Mall_Plaza.Rmd
 load(paste(PathDatos,"20180920RankingMallPlaza2009_2016.RData",sep=""))
 #Generada por  Mall_Plaza.R 
