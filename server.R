@@ -39,11 +39,11 @@ function(input, output) {
   output$comparador<-renderDataTable(Proyectos2016)
 # Tabla 1 Reporte
   output$tbl = renderDT(
-    nomina, options = list(lengthChange = FALSE), rownames=FALSE, caption = "Carreras por beneficiario") 
+    nomina, options = list(lengthChange = FALSE), rownames=FALSE, caption = "") 
   
   output$tblcarreras = renderDT(
     carreras %>% filter(`Nombre carrera genérica` %in% levels(as.factor(nomina$Carrera))), 
-    options = list(lengthChange = FALSE), rownames=FALSE, caption = "Carreras por beneficiario")
+    options = list(lengthChange = FALSE), rownames=FALSE, caption = "")
   
   output$progressBox <- renderInfoBox({
     dfyear<-filter(colunga[,c(4,15,18)], colunga$AnioAsignacion %in% input$year)
