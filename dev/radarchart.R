@@ -2,45 +2,50 @@ library(shiny)
 library(plotly)
 library(dplyr)
 
-data <- data.frame(comuna=c('A','B','C', 'D', 'E', 'F'), pobreza=runif(6)*100)
+data <- data.frame(comuna=c('A','B','C', 'D', 'E', 'F'), pobreza=runif(6)*100, desempleo=runif(6)*100)
 
 ui <- fluidPage(
-  headerPanel('Pobreza por comuna 2015-2017'),
+  headerPanel('Example'),
   sidebarPanel(
-    selectInput('comunas','Comuna', levels(data$comuna), multiple=TRUE, selectize=TRUE),
-    selected = levels(data$comunas)[1:3]),
+    selectInput('xcol','X Variable', names(mtcars)),
+    selectInput('ycol','Y Variable', names(mtcars)),
+    selectInput('comunas','Z Variable', levels(data$comuna), selected = levels(data$comuna)[1:3], multiple=TRUE, selectize=TRUE)),
   mainPanel(
-    plotlyOutput('plot')
+    plotlyOutput('plot'),
+    plotlyOutput('plot2')
   )
 )
 
 server <- function(input, output) {
   
   x <- reactive({
+    mtcars[,input$xcol]
+  })
+  
+  y <- reactive({
+    mtcars[,input$ycol]
+  })
+  
+  z <- reactive({
     data %>% filter(comuna %in% input$comunas) %>% select(pobreza)
   })
   
-  
   output$plot <- renderPlotly(
-    fig <- plot_ly(
-      r = as.numeric(unlist(data %>% filter(comuna %in% levels(data$comuna)[1:5]) %>% select(pobreza))), 
-      theta= levels(data$comuna)[1:5],
+    plot1 <- plot_ly(
+      x = x(),
+      y = y(), 
+      type = 'scatter',
+      mode = 'markers')
+  )
+  
+  output$plot2 <- renderPlotly(
+    plot1 <- plot_ly(
+      r = as.numeric(unlist(z())),
+      theta = letters[1:length(as.numeric(unlist(z())))], 
       type = 'scatterpolar',
-      fill = 'toself'),
-    
-    fig <- fig %>%
-      layout(
-        polar = list(
-          radialaxis = list(
-            visible = T,
-            range = c(0,100)
-          )
-        ),
-        showlegend = F
-      )
+      fill = 'toself')
   )
   
 }
 
 shinyApp(ui,server)
-
