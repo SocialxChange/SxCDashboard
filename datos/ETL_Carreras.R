@@ -1,8 +1,17 @@
+# Este script carga datos de una nómina de beneficiarios de un programa de capacitación
+# Agrega datos de mifuturo.cl para tener a nivel beneficiario datos de:
+# empleabilidad, titulados con continuidad de estudios e ingreso min/max al 4to año 
+# El dataframe resultante es nomina
+
 # Opción global de ruta de archivos de datos:
 # PathDatos<-"datos/"
+# Cargamos credenciales locales de .Renviron (requiere reinicio de sesión para la primera config)
+# PathDatos<-Sys.getenv("PathDatos")
+
 library(dplyr)
 library(tidyverse)
 library(fuzzyjoin)
+library(readxl)
 
 # Cargamos datos originales
 nomina <- read_delim(paste(PathDatos,"nomina.csv",sep=""), 
@@ -72,31 +81,67 @@ carreras <- carreras %>% filter(`Nombre carrera` %in% carreraBen$carreraGenerica
 ## Separamos minimo de máximo
 carreras<- carreras %>% 
   separate(`Ingreso promedio al 4° año de titulación`, into = c("ingmin", "ingmax"), sep = " a ")
-## Guardamos el valor original
+
+### Tramamiento del mínimo
+
+#### Guardamos el valor original Min
 carreras$ingresoMin <- carreras$ingmin
-## Extraemos "De $"
+#### Extraemos "De $"
 carreras$ingmin <- substring(carreras$ingmin,5)
-## Separamos el compomente millón del número
+#### Separamos el compomente millón del número
 carreras <- carreras %>% separate(ingmin, into = c("ingminM", "ingminMil"), sep=" millón")
-## Guardamos Variable con información de si tiene dígito millón
+#### Guardamos Variable con información de si tiene dígito millón
 carreras$sinMillón <- carreras$ingminMil
-## Extraemos los miles para los que NO tienen millón
+#### Extraemos los miles para los que NO tienen millón
 carreras$ingminMil[is.na(carreras$sinMillón)] <- substring(carreras$ingresoMin[is.na(carreras$sinMillón)],5,7)
-## Reemplazamos por NA los que no tienen millón
+#### Reemplazamos por NA los que no tienen millón
 carreras$ingminM[is.na(carreras$sinMillón)] <- NA
-## Extraemos los miles para los que TIENEN millón
+#### Extraemos los miles para los que TIENEN millón
 carreras$ingminMil[!is.na(carreras$sinMillón)] <- substring(carreras$ingminMil[!is.na(carreras$sinMillón)],2,4)
-## Colapsamos digito del millón y cien mil en una sola variable
+#### Colapsamos digito del millón y cien mil en una sola variable
 carreras <- carreras %>% 
   unite(ingmin, c("ingminM", "ingminMil"),sep = "", na.rm=TRUE)
-## Reemplazamos por mil los valores 1 millón
+#### Reemplazamos por mil los valores 1 millón
 carreras$ingmin[which(carreras$sinMillón=="")] <- 1000
-## Reemplazamos por NA donde no hay información aka s/n
+#### Reemplazamos por NA donde no hay información aka s/n
 carreras$ingmin[which(carreras$ingmin=="")] <- NA
+carreras$ingmin <- as.numeric(carreras$ingmin)
 
+### Tramamiento del máximo
 
+#### Guardamos el valor original Max
+carreras$ingresoMax <- carreras$ingmax
+#### Extraemos "De $"
+carreras$ingmax <- substring(carreras$ingmax,2)
+#### Separamos el compomente millón del número
+carreras <- carreras %>% separate(ingmax, into = c("ingmaxM", "ingmaxMil"), sep=" millón")
+#### Guardamos Variable con información de si tiene dígito millón
+carreras$sinMillónMax <- carreras$ingmaxMil
+#### Extraemos los miles para los que NO tienen millón
+carreras$ingmaxMil[is.na(carreras$sinMillónMax)] <- substring(carreras$ingresoMax[is.na(carreras$sinMillónMax)],2,4)
+#### Reemplazamos por NA los que no tienen millón
+carreras$ingmaxM[is.na(carreras$sinMillónMax)] <- NA
+#### Extraemos los miles para los que TIENEN millón
+carreras$ingmaxMil[!is.na(carreras$sinMillónMax)] <- substring(carreras$ingmaxMil[!is.na(carreras$sinMillónMax)],2,4)
+#### Colapsamos digito del millón y cien mil en una sola variable
+carreras <- carreras %>% 
+  unite(ingmax, c("ingmaxM", "ingmaxMil"),sep = "", na.rm=TRUE)
+#### Reemplazamos por mil los valores 1 millón
+carreras$ingmax[which(carreras$sinMillónMax=="")] <- 1000
+#### Reemplazamos por NA donde no hay información aka s/n
+carreras$ingmax[which(carreras$ingmax=="")] <- NA
+carreras$ingmax <- as.numeric(carreras$ingmax)
+
+# Sacamos promedios por carrera
 attach(carreras)
 aggcarreras <-aggregate(carreras, by=list(`Nombre carrera`),
                     FUN=mean, na.rm=TRUE)
-aggcarreras <- aggcarreras[,c(1,8,11)]
+# Dejamos columnas con información
+aggcarreras <- aggcarreras[,c(1,8,11:13)]
+# Cambio de notación porcentual
+aggcarreras$`Empleabilidad 1er año` <- aggcarreras$`Empleabilidad 1er año`*100 
+aggcarreras$`% titulados con continuidad de estudios` <- aggcarreras$`% titulados con continuidad de estudios`*100
 
+# Merge con nomina
+
+nomina <- merge(nomina, aggcarreras, by.x="carreraGenerica", by.y="Group.1")
