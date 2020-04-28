@@ -68,26 +68,32 @@ nomina <-  merge(nomina, carreraBen, by.x = "Carrera", by.y="carrera")
 
 # Nos restringimos a carreras de los beneficiarios
 carreras <- carreras %>% filter(`Nombre carrera` %in% carreraBen$carreraGenerica)
-# Decodificamos intervalor ingresos al 4 año de titulaciòn
+# Decodificamos intervalo ingresos al 4 año de titulaciòn
+## Separamos minimo de máximo
 carreras<- carreras %>% 
   separate(`Ingreso promedio al 4° año de titulación`, into = c("ingmin", "ingmax"), sep = " a ")
-
+## Guardamos el valor original
 carreras$ingresoMin <- carreras$ingmin
+## Extraemos "De $"
 carreras$ingmin <- substring(carreras$ingmin,5)
+## Separamos el compomente millón del número
 carreras <- carreras %>% separate(ingmin, into = c("ingminM", "ingminMil"), sep=" millón")
-carreras <- carreras %>% separate(ingmin, into = c("ingminM", "ingminMil"), sep=" mil")
+## Guardamos Variable con información de si tiene dígito millón
+carreras$sinMillón <- carreras$ingminMil
+## Extraemos los miles para los que NO tienen millón
+carreras$ingminMil[is.na(carreras$sinMillón)] <- substring(carreras$ingresoMin[is.na(carreras$sinMillón)],5,7)
+## Reemplazamos por NA los que no tienen millón
+carreras$ingminM[is.na(carreras$sinMillón)] <- NA
+## Extraemos los miles para los que TIENEN millón
+carreras$ingminMil[!is.na(carreras$sinMillón)] <- substring(carreras$ingminMil[!is.na(carreras$sinMillón)],2,4)
+## Colapsamos digito del millón y cien mil en una sola variable
+carreras <- carreras %>% 
+  unite(ingmin, c("ingminM", "ingminMil"),sep = "", na.rm=TRUE)
+## Reemplazamos por mil los valores 1 millón
+carreras$ingmin[which(carreras$sinMillón=="")] <- 1000
+## Reemplazamos por NA donde no hay información aka s/n
+carreras$ingmin[which(carreras$ingmin=="")] <- NA
 
-carreras$ingminMil[!is.na(carreras$ingminMil)] <- substring(carreras$ingminMil[!is.na(carreras$ingminMil)],5,7)
-carreras$ingminM[is.na(carreras$ingminMil)] <- NA
-carreras$ingminMil[is.na(carreras$ingminM)] <- substring(carreras$ingresoMin[is.na(carreras$ingminM)],5,7)
-auxM$ingminMil <- substring(auxM$ingresoMin,14,16)
-
-#auxM <- data.frame(millon=sub("([-+]?[[:digit:]]+).*", "\\1", carreras$ingmin))
-carreras<- carreras %>% 
-  separate(ingmin, into = c("ingminM", "ingminML"), sep = " [mil|millón] ")
-## Parseamo ingreso màximo
-carreras$ingmax <-  substr(carreras$ingmax,2,4)
-carreras$ingmin <-  substr(carreras$ingmin,5,7)
 
 attach(carreras)
 aggcarreras <-aggregate(carreras, by=list(`Nombre carrera`),
