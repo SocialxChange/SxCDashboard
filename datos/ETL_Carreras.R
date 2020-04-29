@@ -145,3 +145,11 @@ aggcarreras$`% titulados con continuidad de estudios` <- aggcarreras$`% titulado
 # Merge con nomina
 
 nomina <- merge(nomina, aggcarreras, by.x="carreraGenerica", by.y="Group.1")
+
+# Promedios por año y comuna
+
+attach(nomina)
+aggcomunas<-aggregate(nomina, by=list(Localidad, Año),
+                      FUN=mean, na.rm=TRUE)
+aggcomunas <- aggcomunas[,c(1,5,10:13)]
+names(aggcomunas)[c(1,3:4)] <- c("comuna","continuidad","empleabilidad")
