@@ -153,3 +153,11 @@ aggcomunas<-aggregate(nomina, by=list(Localidad, Año),
                       FUN=mean, na.rm=TRUE)
 aggcomunas <- aggcomunas[,c(1,5,10:13)]
 names(aggcomunas)[c(1,3:4)] <- c("comuna","continuidad","empleabilidad")
+
+
+
+
+ingresosAño<-aggregate(nomina, by=list(Año),
+                       FUN=mean, na.rm=TRUE)
+ingresosAño <- ingresosAño[,c(4,11:12)]
+ingresosAño <- ingresosAño[which(ingresosAño$Año!=2014),]
