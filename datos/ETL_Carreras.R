@@ -1,0 +1,163 @@
+# Este script carga datos de una nómina de beneficiarios de un programa de capacitación
+# Agrega datos de mifuturo.cl para tener a nivel beneficiario datos de:
+# empleabilidad, titulados con continuidad de estudios e ingreso min/max al 4to año 
+# El dataframe resultante es nomina
+
+# Opción global de ruta de archivos de datos:
+# PathDatos<-"datos/"
+# Cargamos credenciales locales de .Renviron (requiere reinicio de sesión para la primera config)
+# PathDatos<-Sys.getenv("PathDatos")
+
+library(dplyr)
+library(tidyverse)
+library(fuzzyjoin)
+library(readxl)
+
+# Cargamos datos originales
+nomina <- read_delim(paste(PathDatos,"nomina.csv",sep=""), 
+                     ";", escape_double = FALSE, trim_ws = TRUE)
+carreras <- read_excel(paste(PathDatos,"Buscador-empleabilidad-e-ingresos_mifuturo_2020.xlsx",sep=""))
+carreras<- carreras[1:(nrow(carreras)-3),]
+## Reemplazamos carrera en nomina no existente en base de carreras
+nomina$Carrera[which(nomina$Carrera=="Educadora de Párvulos")] <- "Educación Parvularia"
+nomina$Carrera[which(nomina$Carrera=="Electricidad y Electrónica Industrial")] <- "Técnico en Electricidad y Electrónica Industrial"
+nomina$Carrera[which(nomina$Carrera=="Ingeniería Geomensor")] <- "Ingeniería en Geomensura"
+nomina$Carrera[which(nomina$Carrera=="Gastronomia Internacional y Tradicional Chilena")] <- "Técnico en Cocina Internacional y Tradicional Chilena"
+nomina$Carrera[which(nomina$Carrera=="Ing. Prevención de Riesgo")] <- "Ingeniería en Prevención de Riesgos"
+nomina$Carrera[which(nomina$Carrera=="Pedagogía General Básica")] <- "Pedagogía en Educación General Básica"
+nomina$Carrera[which(nomina$Carrera=="Secretariado Ejecutivo en Computación")] <- "Secretariado Ejecutivo Bilingüe"
+nomina$Carrera[which(nomina$Carrera=="Técnico Ejecución en Administración")] <- "Ingeniería de Ejecución en Administración"
+nomina$Carrera[which(nomina$Carrera=="Técnico en Operador Planta")] <- "Técnico en Operaciones Mineras"
+nomina$Carrera[which(nomina$Carrera=="Técnico Mecánico")] <- "Ingeniería de Ejecución Mecánica"
+
+# Extraemos las carreras de los beneficiarios
+carreraBen<-data.frame(carrera=levels(as.factor(nomina$Carrera)))
+## Hay 29 beneficiarios y 23 carreras 
+
+
+# Extraemos los nombres genéricos de carreras
+carrerasOficial<-data.frame(carreraGenerica=levels(as.factor(carreras$`Nombre carrera`)))
+## Hay 177 nombres genericos sobre 1479 carreras
+
+# Hacemos un primer fuzzy join
+## Con max_dist=3 psicología tiene más de un match
+joined <- carreraBen %>%
+  stringdist_inner_join(carrerasOficial, by = c(carrera = "carreraGenerica"), max_dist = 2)
+
+# Agregamos Equivalencia
+carreraBen <- merge(carreraBen,joined, by.x = "carrera", by.y="carrera", all.x=TRUE)
+
+# Hacemos un segundo fuzzy join
+## Con max_dist=5 hay matchs incorrectos
+joined2 <- carreraBen %>% filter(is.na(carreraGenerica)) %>% select(carrera) %>%
+  stringdist_inner_join(carrerasOficial, by = c(carrera = "carreraGenerica"), max_dist = 4)
+
+# Agregamos nuevas equivalencias
+carreraBen <- merge(carreraBen,joined2, by.x = "carrera", by.y="carrera", all.x=TRUE)
+
+# Juntamos equivalencias en una sola columna
+carreraBen <- carreraBen %>% mutate(carreraGenerica = coalesce(carreraGenerica.x,carreraGenerica.y)) %>%
+  select(carrera, carreraGenerica)
+
+##Esto permite ver potenciales equivalencias
+# carreraBen$equiv <- ""
+# for(i in 1:dim(carreraBen)[1]) {
+#   if(is.na(carreraBen$carreraGenerica[i])){
+#     x <- agrep(carreraBen$carrera[i], carrerasOficial$carrera,
+#                ignore.case=TRUE, value=TRUE,
+#                max.distance = 0.2, useBytes = TRUE)
+#     print(x)
+#     x <- paste0(x,"")
+#     carreraBen$equiv[i] <- x
+#   }
+#   
+# } 
+
+nomina <-  merge(nomina, carreraBen, by.x = "Carrera", by.y="carrera")
+
+# Nos restringimos a carreras de los beneficiarios
+carreras <- carreras %>% filter(`Nombre carrera` %in% carreraBen$carreraGenerica)
+# Decodificamos intervalo ingresos al 4 año de titulaciòn
+## Separamos minimo de máximo
+carreras<- carreras %>% 
+  separate(`Ingreso promedio al 4° año de titulación`, into = c("ingmin", "ingmax"), sep = " a ")
+
+### Tramamiento del mínimo
+
+#### Guardamos el valor original Min
+carreras$ingresoMin <- carreras$ingmin
+#### Extraemos "De $"
+carreras$ingmin <- substring(carreras$ingmin,5)
+#### Separamos el compomente millón del número
+carreras <- carreras %>% separate(ingmin, into = c("ingminM", "ingminMil"), sep=" millón")
+#### Guardamos Variable con información de si tiene dígito millón
+carreras$sinMillón <- carreras$ingminMil
+#### Extraemos los miles para los que NO tienen millón
+carreras$ingminMil[is.na(carreras$sinMillón)] <- substring(carreras$ingresoMin[is.na(carreras$sinMillón)],5,7)
+#### Reemplazamos por NA los que no tienen millón
+carreras$ingminM[is.na(carreras$sinMillón)] <- NA
+#### Extraemos los miles para los que TIENEN millón
+carreras$ingminMil[!is.na(carreras$sinMillón)] <- substring(carreras$ingminMil[!is.na(carreras$sinMillón)],2,4)
+#### Colapsamos digito del millón y cien mil en una sola variable
+carreras <- carreras %>% 
+  unite(ingmin, c("ingminM", "ingminMil"),sep = "", na.rm=TRUE)
+#### Reemplazamos por mil los valores 1 millón
+carreras$ingmin[which(carreras$sinMillón=="")] <- 1000
+#### Reemplazamos por NA donde no hay información aka s/n
+carreras$ingmin[which(carreras$ingmin=="")] <- NA
+carreras$ingmin <- as.numeric(carreras$ingmin)
+
+### Tramamiento del máximo
+
+#### Guardamos el valor original Max
+carreras$ingresoMax <- carreras$ingmax
+#### Extraemos "De $"
+carreras$ingmax <- substring(carreras$ingmax,2)
+#### Separamos el compomente millón del número
+carreras <- carreras %>% separate(ingmax, into = c("ingmaxM", "ingmaxMil"), sep=" millón")
+#### Guardamos Variable con información de si tiene dígito millón
+carreras$sinMillónMax <- carreras$ingmaxMil
+#### Extraemos los miles para los que NO tienen millón
+carreras$ingmaxMil[is.na(carreras$sinMillónMax)] <- substring(carreras$ingresoMax[is.na(carreras$sinMillónMax)],2,4)
+#### Reemplazamos por NA los que no tienen millón
+carreras$ingmaxM[is.na(carreras$sinMillónMax)] <- NA
+#### Extraemos los miles para los que TIENEN millón
+carreras$ingmaxMil[!is.na(carreras$sinMillónMax)] <- substring(carreras$ingmaxMil[!is.na(carreras$sinMillónMax)],2,4)
+#### Colapsamos digito del millón y cien mil en una sola variable
+carreras <- carreras %>% 
+  unite(ingmax, c("ingmaxM", "ingmaxMil"),sep = "", na.rm=TRUE)
+#### Reemplazamos por mil los valores 1 millón
+carreras$ingmax[which(carreras$sinMillónMax=="")] <- 1000
+#### Reemplazamos por NA donde no hay información aka s/n
+carreras$ingmax[which(carreras$ingmax=="")] <- NA
+carreras$ingmax <- as.numeric(carreras$ingmax)
+
+# Sacamos promedios por carrera
+attach(carreras)
+aggcarreras <-aggregate(carreras, by=list(`Nombre carrera`),
+                    FUN=mean, na.rm=TRUE)
+# Dejamos columnas con información
+aggcarreras <- aggcarreras[,c(1,8,11:13)]
+# Cambio de notación porcentual
+aggcarreras$`Empleabilidad 1er año` <- aggcarreras$`Empleabilidad 1er año`*100 
+aggcarreras$`% titulados con continuidad de estudios` <- aggcarreras$`% titulados con continuidad de estudios`*100
+
+# Merge con nomina
+
+nomina <- merge(nomina, aggcarreras, by.x="carreraGenerica", by.y="Group.1")
+
+# Promedios por año y comuna
+
+attach(nomina)
+aggcomunas<-aggregate(nomina, by=list(Localidad, Año),
+                      FUN=mean, na.rm=TRUE)
+aggcomunas <- aggcomunas[,c(1,5,10:13)]
+names(aggcomunas)[c(1,3:4)] <- c("comuna","continuidad","empleabilidad")
+
+
+
+
+ingresosAño<-aggregate(nomina, by=list(Año),
+                       FUN=mean, na.rm=TRUE)
+ingresosAño <- ingresosAño[,c(4,11:12)]
+ingresosAño <- ingresosAño[which(ingresosAño$Año!=2014),]
