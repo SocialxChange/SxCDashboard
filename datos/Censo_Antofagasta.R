@@ -27,10 +27,6 @@ save(Censo_RII,file="Censo_RII.Rda")
 # 2301	Tocopilla
 # 2302	María Elena
 
-### Load Censo RII
-load("Censo_RII.Rda")
-
-
 ### Subset data censal por comuna
 Antofagasta<-subset(Censo_RII, COMUNA == 2101)
 Mejillones<-subset(Censo_RII, COMUNA == 2102)
@@ -156,32 +152,6 @@ Pob_RII<- data.frame("Nom_Com" = c("Antofagasta","Mejillones","Sierra Gorda","Ta
 ### guardando data frame en CSV
 write.csv(Pob_RII,"/Users/joaquinfernandez/Documents/SxCDashboard/datos/Pob_RII.csv", row.names = FALSE)
 
-Pob_HM<-Pob_RII[,-c(2,5:9)]
-write.csv(Pob_HM,"/Users/joaquinfernandez/Documents/SxCDashboard/datos/Pob_HM.csv", row.names = FALSE)
-
-Pob_Educ<-Pob_RII[, -c(3:5)]
-
-### Convirtiendo a numerico los datos
-Pob_Educ$Pob_Total<-as.numeric(as.character(Pob_Educ$Pob_Total))
-Pob_Educ$Población.4.a.6.años<-as.numeric(as.character(Pob_Educ$Población.4.a.6.años))
-Pob_Educ$Población.7.a.14.años<-as.numeric(as.character(Pob_Educ$Población.7.a.14.años))
-Pob_Educ$Población.15.a.18.años<-as.numeric(as.character(Pob_Educ$Población.15.a.18.años))
-Pob_Educ$Población.19.a.25.años<-as.numeric(as.character(Pob_Educ$Población.19.a.25.años))
-
-
-Pob_Educ$No_asiste<-Pob_Educ$Pob_Total-rowSums(Pob_Educ[,3:6])
-Pob_Educ<-Pob_Educ[, -c(2,7)]
-
-### Naming Columns
-names(Pob_Educ)[1] <- "Comuna"
-names(Pob_Educ)[2] <- "Parvulo"
-names(Pob_Educ)[3] <- "Basica"
-names(Pob_Educ)[4] <- "Media"
-names(Pob_Educ)[5] <- "Superior"
-write.csv(Pob_Educ,"/Users/joaquinfernandez/Documents/SxCDashboard/datos/Pob_TipoEduc.csv", row.names = FALSE)
-
-
-                                            
 ##########################################
 ##2. Datos educacionales a nivel comunal 
 #########################################

@@ -121,17 +121,3 @@ Panel_Mat_12_19$comuna[grep("MAR", Panel_Mat_12_19$comuna)] <- "MARIA ELENA"
 
 ### guardando data frame en CSV
 write.csv(Panel_Mat_12_19,"/Users/joaquinfernandez/Documents/SxCDashboard/datos/Mat_hist_RII.csv", row.names = FALSE)
-
-library(tibble)
-setwd("/Users/joaquinfernandez/Documents/SxCDashboard/datos")
-Panel_Mat_12_19 <- read.csv(file="Mat_hist_RII.csv")
-
-### Generando columna otros
-Panel_Mat_12_19$Otros<-Panel_Mat_12_19$Total-(Panel_Mat_12_19$Basica+Panel_Mat_12_19$Media.HC+Panel_Mat_12_19$Media.TP)
-
-##Eliminando columna parvulo y total
-Panel_Mat_12_19<-Panel_Mat_12_19[, -c(2, 6)]
-
-##Reordenando
-Panel_Mat_12_19<-Panel_Mat_12_19[, c(1, 5, 2, 3, 4,6)]
-write.csv(Panel_Mat_12_19,"/Users/joaquinfernandez/Documents/SxCDashboard/datos/Mat_hist_RII.csv", row.names = FALSE)

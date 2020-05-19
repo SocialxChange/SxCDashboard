@@ -42,7 +42,7 @@ setwd("~/Documents/SxCDashboard")
 
 ## Se incluye logo de SxC 
 
-source("datos/global_tablas.R")
+#source("datos/global_tablas.R")
 source("datos/ETL_Carreras.R")
 
 ```
