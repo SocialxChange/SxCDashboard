@@ -109,19 +109,17 @@ h3("Indicadores del Programa"),
   ),
 
 fluidRow(
-  box(title = "Distribución Becas por Género", status = "info", solidHeader=TRUE,collapsible = TRUE,collapsed=TRUE,width=12,
-             plotlyOutput("HM_Becarios"),
-             plotlyOutput("HM_Becarios_Anual")
-)),
-
-fluidRow(
   box(title = "Ingreso Esperado Beneficiarios", status = "info", solidHeader=TRUE,collapsible = TRUE,collapsed=TRUE,width=12,
       plotlyOutput("Ingresos"))),
 
 fluidRow(
   box(title = "Desempeño Esperado Beneficiarios 2015-2017", status = "info", solidHeader=TRUE,collapsible = TRUE,collapsed=TRUE,width=12,
       selectInput('indicador','Métrica', c("empleabilidad", "continuidad"), selected="empleabilidad", multiple=FALSE, selectize=FALSE),
-      plotlyOutput("DESEMPEÑO")))
+      plotlyOutput("DESEMPEÑO"))),
+
+fluidRow(
+  box(title = "Distribución Becas por Género", status = "info", solidHeader=TRUE,collapsible = TRUE,collapsed=TRUE,width=12,
+             plotlyOutput("HM_becariosPie"),plotlyOutput("HM_becarios_AnualPie")))
 
 )
 
@@ -372,6 +370,16 @@ server <- function(input, output) {
           yaxis = list(title = "Cantidad de becas")
         )
       })
+    
+    output$BECAS2 <-renderPlotly({
+      plot_ly(becas, x = ~Año, name='Cantidad Becas') %>% 
+        add_trace(y = ~Total, name = 'Total Becas', type = 'scatter', mode = 'lines', line=list(color='rgba(29, 201, 161, 1)')) %>%
+        add_trace(y = ~Media, name = 'Educación Media', type = 'scatter', mode = 'lines', line=list(color='rgba(239, 192, 0, 1)')) %>%
+        add_trace(y = ~Superior, name = 'Nivel Superior', type = 'scatter', mode = 'lines', line = list(color = 'rgba(91, 203, 253, 1)'))  %>%
+        layout(
+          yaxis = list(title = "Cantidad de becas")
+        )
+    })
   
   f <- reactive({
       nomina %>% filter(comuna %in% input$comunasPer) %>% select(empleabilidad)
@@ -529,8 +537,8 @@ server <- function(input, output) {
     }
   )
   
-  output$HM_becarios <- renderPlotly(
-    figura<-plot_ly(
+  output$HM_becariosPie <- renderPlotly(
+    fig<-plot_ly(
       HM_becarios, labels = ~Genero, values = ~HM, type = 'pie',
       textposition = 'inside',
       textinfo = 'label+percent',
@@ -540,10 +548,10 @@ server <- function(input, output) {
       showlegend = FALSE)
   )
   
-  output$HM_becarios_Anual<-renderPlotly(
+  output$HM_becarios_AnualPie<-renderPlotly(
     plot_ly(HM_becarios_Anual, x = ~Año, name='Genero Becarios') %>% 
       add_trace(y = ~HM_becarios_Anual%>%filter(Genero=="Femenino"), name = 'Femenino', type = 'scatter', mode = 'lines', line=list(color='rgba(29, 201, 161, 1)')) %>%
-      add_trace(y = ~~HM_becarios_Anual%>%filter(Genero=="Masculino"), name = 'Masculino', type = 'scatter', mode = 'lines', line=list(color='rgba(91, 203, 253, 1)')) %>%
+      add_trace(y = ~HM_becarios_Anual%>%filter(Genero=="Masculino"), name = 'Masculino', type = 'scatter', mode = 'lines', line=list(color='rgba(91, 203, 253, 1)')) %>%
       layout(
         yaxis = list(title = "Nro Becarios")
       )
