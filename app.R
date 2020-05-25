@@ -107,6 +107,10 @@ h3("Indicadores del Programa"),
   box(title = "Tasa de Incidencia del Programa", status = "info", solidHeader=TRUE,collapsible = TRUE,collapsed=TRUE,width=12,
    plotlyOutput("incidencia")),
   ),
+fluidRow(
+  box(title = "Distribución Becas por Género", status = "info", solidHeader=TRUE,collapsible = TRUE,collapsed=TRUE,width=12,
+      column(4,plotlyOutput("HM_becariosPie")),
+      column(8,plotlyOutput("HM_becarios_AnualPie")))),
 
 fluidRow(
   box(title = "Ingreso Esperado Beneficiarios", status = "info", solidHeader=TRUE,collapsible = TRUE,collapsed=TRUE,width=12,
@@ -115,11 +119,7 @@ fluidRow(
 fluidRow(
   box(title = "Desempeño Esperado Beneficiarios 2015-2017", status = "info", solidHeader=TRUE,collapsible = TRUE,collapsed=TRUE,width=12,
       selectInput('indicador','Métrica', c("empleabilidad", "continuidad"), selected="empleabilidad", multiple=FALSE, selectize=FALSE),
-      plotlyOutput("DESEMPEÑO"))),
-
-fluidRow(
-  box(title = "Distribución Becas por Género", status = "info", solidHeader=TRUE,collapsible = TRUE,collapsed=TRUE,width=12,
-             plotlyOutput("HM_becariosPie"),plotlyOutput("HM_becarios_AnualPie")))
+      plotlyOutput("DESEMPEÑO")))
 
 )
 

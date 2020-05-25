@@ -24,10 +24,10 @@ options(scipen=100)
 
 PathDatos<-"datos/"
 
-pob_hm<-read.csv(paste(PathDatos,"pob_hm.csv",sep=""))
-pob_tipoeduc<-read.csv(paste(PathDatos,"pob_tipoeduc.csv",sep=""))
+pob_hm<-read.csv(paste(PathDatos,"Pob_HM.csv",sep=""))
+pob_tipoeduc<-read.csv(paste(PathDatos,"Pob_TipoEduc.csv",sep=""))
 Mat_hist_RII<-read.csv(paste(PathDatos,"Mat_hist_RII.csv",sep=""))
-becados_tincidencia<-read.csv(paste(PathDatos,"becados_tincidencia.csv",sep=""))
+becados_tincidencia<-read.csv(paste(PathDatos,"Becados_tincidencia.csv",sep=""))
 
 
 nomina <- read_delim(paste(PathDatos,"nomina.csv",sep=""), 
