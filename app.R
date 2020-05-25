@@ -545,7 +545,8 @@ server <- function(input, output) {
       insidetextfont = list(color = '#FFFFFF'),
       marker = list(colors = colors,
                     line = list(color = '#FFFFFF', width = 1)),
-      showlegend = FALSE)
+      showlegend = FALSE) %>% 
+      layout(title = "Agregado 2012-2019")
   )
   
   output$HM_becarios_AnualPie<-renderPlotly(
