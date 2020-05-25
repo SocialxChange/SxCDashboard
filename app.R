@@ -34,14 +34,24 @@ sidebar<-  dashboardSidebar(
   collapsed=TRUE
 )
 body<-  dashboardBody(
-h3("Indicadores a Nivel Regional"),
+  #downloadButton("report", "Generate report"),
+  h2(HTML("<b>Bienvenido a su dashboard personalizado</b>")),
+  p(HTML("Presionando el botón <b> + </b> puede desplegar el gráfico informativo correspondiente a cada recuadro.<br>
+     El botón a continuación le permite descargar la información de este tablero en formato pdf, con textos explicativos y referencias.")),
+  div(align="center",
+  tags$head(tags$style(HTML('#reporte_PDF{background-color:#1DC9A1; color:#fff; align= center}'))),
+  actionButton(inputId='reporte_PDF', label="Reporte PDF", width = "325px",
+               icon = icon("file-pdf"), 
+               onclick ="window.open('reporte_bhp.pdf', '_blank')"),
+  ),
+  h3("Indicadores a Nivel Regional"),
           fluidRow(
         box(title="Población/Género", status="primary",solidHeader = TRUE, collapsible=TRUE, collapsed = TRUE, width=6,
-            selectInput("comuna_pobhm","Comuna", c("Antofagasta","Mejillones","Sierra Gorda","Taltal","Calama","Ollagüe","SP Atacama","Tocopilla","Maria Elena")),
+            selectInput("comuna_pobhm","Comuna", c("Antofagasta","Mejillones","Sierra Gorda","Taltal","Calama","Ollagüe","SP Atacama","Tocopilla","Maria Elena"),selected="Sierra Gorda"),
             plotlyOutput("pob_hm")
         ) ,
         box(title="Población según edad/educación", status="primary", solidHeader=TRUE, collapsible = TRUE, collapsed=TRUE, width=6,
-            selectInput("comuna_tipoeduc","Comuna", c("Antofagasta","Mejillones","Sierra Gorda","Taltal","Calama","Ollagüe","SP Atacama","Tocopilla","Maria Elena")),
+            selectInput("comuna_tipoeduc","Comuna", c("Antofagasta","Mejillones","Sierra Gorda","Taltal","Calama","Ollagüe","SP Atacama","Tocopilla","Maria Elena"),selected="Sierra Gorda"),
             plotlyOutput("pob_tipoeduc"))
           ),
           fluidRow(
@@ -50,7 +60,7 @@ h3("Indicadores a Nivel Regional"),
                       "Comunas",
                       c("Elija Comuna",
                         unique(as.character(Pob_Multi$comuna))),
-                      multiple = TRUE, selectize=FALSE, selected=levels(as.factor(Pob_Multi$comuna))[1:3]),
+                      multiple = TRUE, selectize=FALSE, selected=c("Sierra Gorda","Calama","Antofagasta")),
           plotlyOutput('plot')),
           
           box(title = "Pobreza por Ingreso", status = "warning", solidHeader=TRUE,collapsible = TRUE,collapsed=TRUE,width=6,
@@ -58,32 +68,32 @@ h3("Indicadores a Nivel Regional"),
                           "Comunas",
                           c("Elija Comuna",
                             unique(as.character(Pov_Ing$comuna))),
-                          multiple = TRUE, selectize=FALSE, selected=levels(as.factor(Pov_Ing$comuna))[1:3]),
+                          multiple = TRUE, selectize=FALSE, selected=c("Sierra Gorda","Calama","Antofagasta")),
               plotlyOutput("Pov_Ing_radar"))
       ),
     
-    fluidRow(
-        box(title = "Desempleo Histórico Regional", status = "primary", solidHeader=TRUE,collapsible = TRUE,collapsed=TRUE,width=6,
-             dataTableOutput("Desempleo")),
-        box(title = "Empleo", status = "primary", solidHeader=TRUE,collapsible = TRUE,collapsed=TRUE,width=6,
-            checkboxGroupInput("variable", "Tipos empleo en % Pob:",
-                         c("Empleo no remunerado" = "No.Remunerado",
-                           "Desempleado" = "Buscando.Empleo",
-                           "Estudiando",
-                           "Pensionado",
-                           "Otro")),
-            tableOutput("data_Emp")
-    )
-    ),
+    # fluidRow(
+    #     box(title = "Desempleo Histórico Regional", status = "primary", solidHeader=TRUE,collapsible = TRUE,collapsed=TRUE,width=6,
+    #          dataTableOutput("Desempleo")),
+    #     box(title = "Empleo", status = "primary", solidHeader=TRUE,collapsible = TRUE,collapsed=TRUE,width=6,
+    #         checkboxGroupInput("variable", "Tipos empleo en % Pob:",
+    #                      c("Empleo no remunerado" = "No.Remunerado",
+    #                        "Desempleado" = "Buscando.Empleo",
+    #                        "Estudiando",
+    #                        "Pensionado",
+    #                        "Otro")),
+    #         tableOutput("data_Emp")
+    # )
+    # ),
+    # 
   
-  
     fluidRow(
-      box(title = "Situación Educacional por Comunas", status = "warning", solidHeader=TRUE,collapsible = TRUE,collapsed=TRUE,width=6,
+      box(title = "Situación Educacional por Comunas", status = "primary", solidHeader=TRUE,collapsible = TRUE,collapsed=TRUE,width=6,
             dataTableOutput("Educ")),
-      box(title = "Matrículas por Año", status = "warning", solidHeader=TRUE,collapsible = TRUE,collapsed=TRUE,width=6,
+      box(title = "Matrículas por Año", status = "primary", solidHeader=TRUE,collapsible = TRUE,collapsed=TRUE,width=6,
              selectInput("año",
                          "Año",
-                         c("2012","2013","2014","2015","2016","2017","2018","2019")),
+                         c("2012","2013","2014","2015","2016","2017","2018","2019"), selected="2019"),
             plotlyOutput("Matriculas"))
           #tableOutput("Mat"))
     ),
@@ -95,15 +105,15 @@ h3("Indicadores del Programa"),
 
     fluidRow(
   box(title = "Tasa de Incidencia del Programa", status = "info", solidHeader=TRUE,collapsible = TRUE,collapsed=TRUE,width=12,
-  column(6,   
-         h4(HTML("<b>Escuela Media</b>")),
-         selectInput("año_media","Año", c("2012","2013","2014","2015","2016","2017","2018","2019")),
-      plotlyOutput("incidencia_media")),
-  column(6,
-         h4(HTML("<b>Nivel Superior</b>")),
-         selectInput("año_superior","Año", c("2012","2013","2014","2015","2016","2017","2018","2019")),
-         plotlyOutput("incidencia_superior"))
-  )),
+   plotlyOutput("incidencia")),
+  ),
+
+fluidRow(
+  box(title = "Distribución Becas por Género", status = "info", solidHeader=TRUE,collapsible = TRUE,collapsed=TRUE,width=12,
+             plotlyOutput("HM_Becarios"),
+             plotlyOutput("HM_Becarios_Anual")
+)),
+
 fluidRow(
   box(title = "Ingreso Esperado Beneficiarios", status = "info", solidHeader=TRUE,collapsible = TRUE,collapsed=TRUE,width=12,
       plotlyOutput("Ingresos"))),
@@ -356,8 +366,11 @@ server <- function(input, output) {
     output$BECAS <-renderPlotly({
       plot_ly(becas, x = ~Año, name='Cantidad Becas') %>% 
         add_trace(y = ~Total, name = 'Total Becas', type = 'scatter', mode = 'lines', line=list(color='rgba(29, 201, 161, 1)')) %>%
-        add_trace(y = ~Media, name = 'Escuela Media', type = 'scatter', mode = 'lines', line=list(color='rgba(239, 192, 0, 1)')) %>%
-        add_trace(y = ~Superior, name = 'Nivel Superior', type = 'scatter', mode = 'lines', line = list(color = 'rgba(91, 203, 253, 1)')) 
+        add_trace(y = ~Media, name = 'Educación Media', type = 'scatter', mode = 'lines', line=list(color='rgba(239, 192, 0, 1)')) %>%
+        add_trace(y = ~Superior, name = 'Nivel Superior', type = 'scatter', mode = 'lines', line = list(color = 'rgba(91, 203, 253, 1)'))  %>%
+        layout(
+          yaxis = list(title = "Cantidad de becas")
+        )
       })
   
   f <- reactive({
@@ -371,10 +384,10 @@ server <- function(input, output) {
   output$DESEMPEÑO<-renderPlotly(
     fig <- plot_ly(x = ~as.numeric(unlist(aggcomunas %>% filter(comuna=="Baquedano") %>% select(Año))), 
                    y = ~as.numeric(unlist(aggcomunas %>% filter(comuna=="Baquedano") %>% select(input$indicador))), 
-                   name = 'Baquedano', type = 'scatter', mode = 'lines', fill = 'tonexty',fillcolor = '#5BCBFD') %>% 
+                   name = 'Baquedano', type = 'scatter', mode = 'lines',  line=list(color='rgba(239, 192, 0, 1)')) %>% 
       add_trace(x = ~as.numeric(unlist(aggcomunas %>% filter(comuna=="Sierra Gorda") %>% select(Año))), 
                 y = ~as.numeric(unlist(aggcomunas %>% filter(comuna=="Sierra Gorda") %>% select(input$indicador))), 
-                name = 'Sierra Gorda', fillcolor = '#EFC000') %>% 
+                name = 'Sierra Gorda', line = list(color = 'rgba(91, 203, 253, 1)')) %>% 
       layout(title = 'Desempeño esperado beneficiarios',
              xaxis = list(title = "Año",
                           showgrid = FALSE),
@@ -383,48 +396,46 @@ server <- function(input, output) {
                           ticksuffix = ''))
     )
   
+  filtroMatHist<-reactive({
+    Mat_hist %>% 
+      filter(año %in% input$año) 
+    
+    #Mat_hist$Comuna <- factor(Mat_hist$Comuna, levels=unique(Mat_hist$Comuna))
+  })
+  
+  
+  x<-c("ANTOFAGASTA","CALAMA","MARIA ELENA","MEJILLONES","OLLAGÜE",
+       "SAN PEDRO <br> DE ATACAMA", "SIERRA GORDA","TAL TAL","TOCOPILLA")
   output$Matriculas <- renderPlotly(
-    fig<-plot_ly(Mat_hist, x = ~ Mat_hist %>% filter(año %in% input$año) %>% select("Comuna"), y = ~ as.numeric(unlist(Mat_hist %>% filter(año %in% input$año) %>% select("Basica"))), type = 'bar', name = 'Básica', marker = list(color = 'rgba(91, 203, 253)')) %>%
-      add_trace(y = ~ as.numeric(unlist(Mat_hist %>% filter(año %in% input$año) %>% select("Media.HC"))), name = 'Media Humanista-Científico', marker = list(color = 'rgb(239, 192, 0)')) %>%
-      add_trace(y = ~ as.numeric(unlist(Mat_hist %>% filter(año %in% input$año) %>% select("Media.TP"))), name = 'Media Tecnico-Profesional', marker = list(color = 'rgb(29, 201, 161)')) %>% 
-      add_trace(y = ~ as.numeric(unlist(Mat_hist %>% filter(año %in% input$año) %>% select("Otros"))), name = 'Otros', marker = list(color = 'rgb(112, 112, 112)'))%>% 
+    fig<-plot_ly(filtroMatHist(), x = ~Comuna, 
+                 y = ~Basica, 
+                 type = 'bar', name = 'Básica', 
+                 marker = list(color = 'rgba(91, 203, 253)')) %>%
+      add_trace(y = ~Media.HC, 
+                name = 'Media Humanista-Científico', 
+                marker = list(color = 'rgb(239, 192, 0)')) %>%
+      add_trace(y = ~Media.TP, 
+                name = 'Media Tecnico-Profesional', 
+                marker = list(color = 'rgb(29, 201, 161)')) %>% 
+      add_trace(y = ~Otros, 
+                name = 'Otros', marker = list(color = 'rgb(112, 112, 112)')) %>% 
       layout(yaxis = list(title = 'Count'),
              xaxis = list(title = ""),
              yaxis = list(title = ""),
-             legend = list(orientation = 'h'),
+             legend = list(orientation = 'h', y=-0.5),
              barmode = 'stack'))
   
-  filtro2<-reactive({
-    becados_tincidencia %>% filter(Año == input$año_media)%>% select("tasa_Media")
-  })
   
-  output$incidencia_media<-renderPlotly(
-    figuras<-plot_ly(
-      domain = list(x = c(0, 1), y = c(0, 1)),
-      value = filtro2()$tasa_Media[1]*100,
-      gauge = list(
-        axis =list(range = list(NULL, 100)),
-        bar = list(color =  '#5BCBFD')),
-      type = "indicator",
-      mode = "gauge+number")%>%
-      layout(margin = list(l=20,r=30))
-  )
-  filtro3<-reactive({
-    becados_tincidencia %>% filter(Año == input$año_superior)%>% select("tasa_Superior")
-  })
-  
-  output$incidencia_superior<-renderPlotly(
-    figuras<-plot_ly(
-      domain = list(x = c(0, 1), y = c(0, 1)),
-      value = filtro3()$tasa_Superior[1]*100,
-      gauge = list(
-        axis =list(range = list(NULL, 100)),
-        bar = list(color =  '#EFC000')),
-      type = "indicator",
-      mode = "gauge+number")%>%
-      layout(margin = list(l=20,r=30))
-  )
-  
+  output$incidencia<-renderPlotly(
+    plot_ly(becados_tincidencia, x = ~Año, name='Tasa de Incidencia') %>% 
+      add_trace(y = ~tasa_Media, name = 'Tasa Educación Media', type = 'scatter', mode = 'lines', line=list(color='rgba(29, 201, 161, 1)')) %>%
+      add_trace(y = ~tasa_Superior, name = 'Tasa Nivel Superior', type = 'scatter', mode = 'lines', line=list(color='rgba(239, 192, 0, 1)')) %>%
+      layout(
+        yaxis = list(title = "Tasa de incidencia")
+      )
+    )
+
+
   filtro<-reactive({
     pob_hm %>% filter(Nom_Com == input$comuna_pobhm)
   })
@@ -475,9 +486,9 @@ server <- function(input, output) {
                 fill = 'tonexty', fillcolor='rgba(29, 201, 161,0.2)', line = list(color = 'rgba(29, 201, 161,1)'),
                 showlegend = FALSE, name = 'Mínimo') %>% 
       layout(title = "Ingresos mínimos y máximos esperados de beneficiarios",
-             paper_bgcolor='rgb(255,255,255)', plot_bgcolor='rgb(229,229,229)',
+             paper_bgcolor='rgb(255,255,255)', plot_bgcolor='rgb(255,255,255)',
              xaxis = list(title = "Año",
-                          gridcolor = 'rgb(255,255,255)',
+                          gridcolor = 'rgb(229,229,229)',
                           showgrid = TRUE,
                           showline = FALSE,
                           showticklabels = TRUE,
@@ -485,13 +496,57 @@ server <- function(input, output) {
                           ticks = 'outside',
                           zeroline = FALSE),
              yaxis = list(title = "Ingresos (Miles de pesos)",
-                          gridcolor = 'rgb(255,255,255)',
+                          gridcolor = 'rgb(229,229,229)',
                           showgrid = TRUE,
                           showline = FALSE,
                           showticklabels = TRUE,
                           tickcolor = 'rgb(127,127,127)',
                           ticks = 'outside',
                           zeroline = FALSE))
+  )
+  
+  
+  output$report <- downloadHandler(
+    # For PDF output, change this to "report.pdf"
+    filename = "report.pdf",
+    content = function(file) {
+      # Copy the report file to a temporary directory before processing it, in
+      # case we don't have write permissions to the current working dir (which
+      # can happen when deployed).
+      tempReport <- file.path(tempdir(), "report.Rmd")
+      file.copy("report.Rmd", tempReport, overwrite = TRUE)
+      
+      # Set up parameters to pass to Rmd document
+      params <- list(n = input$comuna_pobhm)
+      
+      # Knit the document, passing in the `params` list, and eval it in a
+      # child of the global environment (this isolates the code in the document
+      # from the code in this app).
+      rmarkdown::render(tempReport, output_file = file,
+                        params = params,
+                        envir = new.env(parent = globalenv())
+      )
+    }
+  )
+  
+  output$HM_becarios <- renderPlotly(
+    figura<-plot_ly(
+      HM_becarios, labels = ~Genero, values = ~HM, type = 'pie',
+      textposition = 'inside',
+      textinfo = 'label+percent',
+      insidetextfont = list(color = '#FFFFFF'),
+      marker = list(colors = colors,
+                    line = list(color = '#FFFFFF', width = 1)),
+      showlegend = FALSE)
+  )
+  
+  output$HM_becarios_Anual<-renderPlotly(
+    plot_ly(HM_becarios_Anual, x = ~Año, name='Genero Becarios') %>% 
+      add_trace(y = ~HM_becarios_Anual%>%filter(Genero=="Femenino"), name = 'Femenino', type = 'scatter', mode = 'lines', line=list(color='rgba(29, 201, 161, 1)')) %>%
+      add_trace(y = ~~HM_becarios_Anual%>%filter(Genero=="Masculino"), name = 'Masculino', type = 'scatter', mode = 'lines', line=list(color='rgba(91, 203, 253, 1)')) %>%
+      layout(
+        yaxis = list(title = "Nro Becarios")
+      )
   )
   
 }
