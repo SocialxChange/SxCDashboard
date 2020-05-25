@@ -124,7 +124,7 @@ HM_becarios_Anual <- as.data.frame(t(as.matrix(HM_becarios_Anual)))
 names(HM_becarios_Anual) <- c("Femenino", "Masculino")
 HM_becarios_Anual <- HM_becarios_Anual[-1,]
 HM_becarios_Anual <- tibble::rownames_to_column(HM_becarios_Anual, "Año")
-HM_becarios_Anual$`Masculino`[is.na(HM_becarios_Anual$`Masculino`)] <- 0
-HM_becarios_Anual$`Femenino`[is.na(HM_becarios_Anual$`Femenino`)] <- 0
+HM_becarios_Anual$Masculino[is.na(HM_becarios_Anual$Masculino)] <- 0
+HM_becarios_Anual$Femenino[is.na(HM_becarios_Anual$Femenino)] <- 0
 HM_becarios_Anual$Femenino <- as.numeric(HM_becarios_Anual$Femenino)
 HM_becarios_Anual$Masculino <- as.numeric(HM_becarios_Anual$Masculino)
