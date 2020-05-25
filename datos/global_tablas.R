@@ -120,4 +120,11 @@ HM_becarios_Anual<-merge.data.frame(HM_becarios_Anual,HM_becarios_2016,by="Gener
 HM_becarios_Anual<-merge.data.frame(HM_becarios_Anual,HM_becarios_2017,by="Genero",all.x=TRUE,all.y = TRUE)
 HM_becarios_Anual<-merge.data.frame(HM_becarios_Anual,HM_becarios_2018,by="Genero",all.x=TRUE,all.y = TRUE)
 HM_becarios_Anual<-merge.data.frame(HM_becarios_Anual,HM_becarios_2019,by="Genero",all.x=TRUE,all.y = TRUE)
-HM_becarios_Anual<-HM_becarios_Anual%>% gather(Año,Proporcion, "2012":"2019")
+HM_becarios_Anual <- as.data.frame(t(as.matrix(HM_becarios_Anual)))
+names(HM_becarios_Anual) <- c("Femenino", "Masculino")
+HM_becarios_Anual <- HM_becarios_Anual[-1,]
+HM_becarios_Anual <- tibble::rownames_to_column(HM_becarios_Anual, "Año")
+HM_becarios_Anual$`Masculino`[is.na(HM_becarios_Anual$`Masculino`)] <- 0
+HM_becarios_Anual$`Femenino`[is.na(HM_becarios_Anual$`Femenino`)] <- 0
+HM_becarios_Anual$Femenino <- as.numeric(HM_becarios_Anual$Femenino)
+HM_becarios_Anual$Masculino <- as.numeric(HM_becarios_Anual$Masculino)

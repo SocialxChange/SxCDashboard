@@ -550,8 +550,8 @@ server <- function(input, output) {
   
   output$HM_becarios_AnualPie<-renderPlotly(
     plot_ly(HM_becarios_Anual, x = ~Año, name='Genero Becarios') %>% 
-      add_trace(y = ~HM_becarios_Anual%>%filter(Genero=="Femenino"), name = 'Femenino', type = 'scatter', mode = 'lines', line=list(color='rgba(29, 201, 161, 1)')) %>%
-      add_trace(y = ~HM_becarios_Anual%>%filter(Genero=="Masculino"), name = 'Masculino', type = 'scatter', mode = 'lines', line=list(color='rgba(91, 203, 253, 1)')) %>%
+      add_trace(y = ~HM_becarios_Anual$Femenino, name = 'Femenino', type = 'scatter', mode = 'lines', line=list(color='rgba(29, 201, 161, 1)')) %>%
+      add_trace(y = ~HM_becarios_Anual$Masculino, name = 'Masculino', type = 'scatter', mode = 'lines', line=list(color='rgba(91, 203, 253, 1)')) %>%
       layout(
         yaxis = list(title = "Nro Becarios")
       )
