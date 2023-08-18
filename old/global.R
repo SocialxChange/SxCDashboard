@@ -1,4 +1,4 @@
-Sys.setlocale("LC_ALL", 'UTF-8')
+# Sys.setlocale("LC_ALL", 'UTF-8')
 library(shiny)
 library(dplyr)
 library(shinydashboard)
@@ -23,6 +23,7 @@ load(paste(PathDatos,"20180920RankingMallPlaza2009_2016.RData",sep=""))
 load(paste(PathDatos,"20180920Donaciones_MallPlaza2009_2016.RData",sep=""))
 #Importada de planilla de Arturo Celedon
 load(paste(PathDatos,"colunga.RData",sep=""))
+
 # Cambio nombre colunga$`EVALUACION EFECTIVIDAD AÑO 0 (enero 2017`
 colnames(colunga)[15] <- "AnioAsignacion"
 colnames(colunga)[18] <- "AporteConvenio"
