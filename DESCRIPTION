@@ -2,12 +2,11 @@ Package: sxcdashboard
 Title: An Amazing Shiny App
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "firstname",
-           family = "lastname",
-           role = c("aut", "cre"),
-           email = "your@email.com")
+    person("firstname", "lastname", , "your@email.com", role = c("aut", "cre"))
 Description: What the package does (one paragraph).
-License: What license is it under?
+License: Apache License (>= 2)
+Depends: 
+    R (>= 2.10)
 Imports: 
     bubbles,
     colorspace,
@@ -15,18 +14,16 @@ Imports:
     dplyr,
     DT,
     golem (>= 0.4.1),
+    grDevices,
     leaflet,
-    leaflet.extras,
     magrittr,
     plotly,
-    scales,
+    rlang,
     shiny (>= 1.6.0),
     shinydashboard
-Encoding: UTF-8
-LazyData: true
-RoxygenNote: 7.2.3
-Depends: 
-    R (>= 2.10)
 Remotes:
     jcheng5/bubbles
+Encoding: UTF-8
+LazyData: true
 Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
