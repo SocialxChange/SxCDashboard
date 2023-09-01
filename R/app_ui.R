@@ -84,12 +84,16 @@ app_ui <- function(request) {
               box(
                 width = 2, solidHeader = TRUE,
                 title = "Ubicación",
-                checkboxGroupInput("location", "", levels(as.factor(colunga$region)), selected = levels(as.factor(colunga$region)))
+                checkboxGroupInput("location", "",
+                  levels(as.factor(sxcdashboard::colunga$region)),
+                  selected = levels(as.factor(sxcdashboard::colunga$region)))
               ),
               box(
                 width = 2, solidHeader = TRUE,
                 title = "Año",
-                checkboxGroupInput("year", "", levels(as.factor(colunga$anio_asignacion)), selected = levels(as.factor(colunga$anio_asignacion)))
+                checkboxGroupInput("year", "",
+                  levels(as.factor(sxcdashboard::colunga$anio_asignacion)),
+                  selected = levels(as.factor(sxcdashboard::colunga$anio_asignacion)))
               )
             ),
             # Fluid Row POBREZA
@@ -104,14 +108,16 @@ app_ui <- function(request) {
               box(
                 width = 2, solidHeader = TRUE,
                 title = "Comunas",
-                checkboxGroupInput("comunas", "", levels(metricas_comuna$comuna), selected = levels(metricas_comuna$comuna))
+                checkboxGroupInput("comunas", "",
+                  levels(sxcdashboard::metricas_comuna$comuna),
+                  selected = levels(sxcdashboard::metricas_comuna$comuna))
               ),
               # Caja con grafico tendencias de Google
               fluidRow(box(
                 title = "Tendencias de Google",
                 height = "500px",
                 solidHeader = TRUE,
-                plot_ly(gtrends, x = ~fecha, y = ~educacion, name = "Educación", type = "scatter", mode = "lines") %>%
+                plot_ly(sxcdashboard::gtrends, x = ~fecha, y = ~educacion, name = "Educación", type = "scatter", mode = "lines") %>%
                   add_trace(y = ~salud, name = "Salud", mode = "lines+markers") %>%
                   add_trace(y = ~infancia, name = "Infancia", mode = "lines+markers") %>%
                   layout(
@@ -145,13 +151,13 @@ app_ui <- function(request) {
                       fill = "toself"
                     ) %>%
                       add_trace(
-                        r = c(datos1, datos1[1]),
-                        theta = variables,
+                        r = c(sxcdashboard::datos1, sxcdashboard::datos1[1]),
+                        theta = sxcdashboard::variables,
                         name = "2018"
                       ) %>%
                       add_trace(
-                        r = c(datos2, datos2[1]),
-                        theta = variables,
+                        r = c(sxcdashboard::datos2, sxcdashboard::datos2[1]),
+                        theta = sxcdashboard::variables,
                         name = "2019"
                       ) %>%
                       layout(
@@ -166,7 +172,7 @@ app_ui <- function(request) {
                   box(
                     title = "Financiamiento vs Efectividad Promedio",
                     width = "auto", solidHeader = TRUE,
-                    plot_ly(colunga, x = ~anio_asignacion, y = ~aporte_convenio, name = "Monto Financiado", type = "scatter")
+                    plot_ly(sxcdashboard::colunga, x = ~anio_asignacion, y = ~aporte_convenio, name = "Monto Financiado", type = "scatter")
                   )
                 )
               ),
@@ -175,7 +181,7 @@ app_ui <- function(request) {
                 box(
                   title = "Financiamiento por año",
                   width = "auto", solidHeader = TRUE,
-                  plot_ly(data.frame(datos5, datos6), x = ~datos6, y = ~datos5, name = "Monto Financiado", type = "scatter", mode = "lines")
+                  plot_ly(data.frame(sxcdashboard::datos5, sxcdashboard::datos6), x = ~datos6, y = ~datos5, name = "Monto Financiado", type = "scatter", mode = "lines")
                 )
               )
             )
@@ -186,6 +192,9 @@ app_ui <- function(request) {
           tabItem(
             tabName = "seguimiento",
             fluidPage(
+
+              # ESTA SECCION NO FUNCIONA CON LA VERSION ACTUAL DE SHINY ----
+
               # titlePanel("Cumplimiento y Validación Hitos"),
               # navlistPanel(
                 # "",
@@ -194,7 +203,7 @@ app_ui <- function(request) {
                 # tabPanel("Component 3"),
                 # tabPanel("Component 4"),
                 # "-----",
-                DTOutput("tbl")
+                # DTOutput("tbl")
               # )
             )
           ),
